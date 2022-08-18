@@ -1,13 +1,13 @@
 package battleship.Ships;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 abstract public class Ship {
-    int size;
-
+    List<String> shipBlocks;
     public Ship(int size) {
-        this.size = size;
-    }
-
-    public int getSize() {
-        return size;
+        shipBlocks = new ArrayList<>(size);
+        Collections.fill(shipBlocks,"O");
     }
 }
