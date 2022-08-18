@@ -1,24 +1,25 @@
 package battleship;
 
 
+import java.util.Arrays;
 import java.util.List;
 
+import static java.lang.String.valueOf;
+
 public class PlayingField {
-    private static final String[][] field = new String[FieldSizeAndValues.SIZE_STR][FieldSizeAndValues.SIZE_COLUMNS];
+    private static final char[][] field = new char[FieldSizeAndValues.SIZE_STR][FieldSizeAndValues.SIZE_COLUMNS];
 
     protected PlayingField() {
         initFillField();
     }
 
     private void initFillField() {
-//        field[0][0] = " ";
-//        UtilsFillField.fillSpaceField(field,0, FieldSizeAndValues.SIZE_STR, FieldSizeAndValues.SIZE_COLUMNS);
-//
-//        UtilsFillField.FillOneStrNumbers(field,1, FieldSizeAndValues.SIZE_COLUMNS);
-//
-//        UtilsFillField.fillOneColumnLetters(field,1, FieldSizeAndValues.SIZE_STR);
+        char[] strFillFogBlocks = new char[FieldSizeAndValues.SIZE_COLUMNS];
+        Arrays.fill(strFillFogBlocks, FieldSizeAndValues.FOG_BlOCK);
 
-        UtilsFillField.FillFieldFOG(field, 0, FieldSizeAndValues.SIZE_STR, FieldSizeAndValues.SIZE_COLUMNS);
+        for (int i = 0; i < FieldSizeAndValues.SIZE_STR; i++) {
+            field[i] = strFillFogBlocks;
+        }
     }
 
 
@@ -34,10 +35,11 @@ public class PlayingField {
     @Override
     public String toString() {
         int sizeStringFieldStr = FieldSizeAndValues.SIZE_STR + 1;
-        int sizeStringFieldColumn = FieldSizeAndValues.SIZE_COLUMNS * 2 + 1;
 
+        String space = " ";
         // create 11 str
         String[] str = new String[sizeStringFieldStr];
+
 
         // fill one str __1_2_3_4_5_6_7_8_9_10
         str[0] = fillOneStrNumbers(sizeStringFieldStr);
@@ -48,16 +50,24 @@ public class PlayingField {
             StringBuilder b = new StringBuilder();
             b.append("\n");
             // ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-            b.append(String.join(" ", field[i - 1]));
+            b.append(String.join("",AddChar(field[i-1], space)));
             // A ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-            b.insert(1, letters.get(i - 1) + " ");
+            b.insert(1, letters.get(i - 1) + space);
 
             str[i] = b.toString();
         }
         return String.join("", str);
     }
 
-    public String[][] getField() {
+    public char[][] getField() {
         return field;
+    }
+
+    private String[] AddChar(char[] mass, String ch) {
+        String[] addSpaceChar = new String[mass.length];
+        for (int i = 0; i < mass.length; i++) {
+            addSpaceChar[i] = (mass[i] + ch);
+        }
+        return addSpaceChar;
     }
 }
