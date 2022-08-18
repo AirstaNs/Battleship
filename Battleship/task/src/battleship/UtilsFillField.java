@@ -28,14 +28,13 @@ public class UtilsFillField {
     }
 
     protected static void FillOneStrNumbers(String[][] field, int start, int endColumn) {
-        for (int i = start; i < endColumn; i += 2) {
-            int numberColumn = i / 2;
-            field[0][i] = String.valueOf(numberColumn);
+        for (int i = start+1; i < endColumn; i ++) {
+            field[0][i] = String.valueOf(i);
         }
     }
     protected static void FillFieldFOG(String[][] field, int start, int endStr, int endColumn){
         for (int i = start+1; i <endStr ; i++) {
-            for (int j = start+2; j <endColumn ; j++) {
+            for (int j = start+1; j <endColumn ; j++) {
                 field[i][j] = FieldSizeAndValues.FOG_BlOCK;
             }
         }

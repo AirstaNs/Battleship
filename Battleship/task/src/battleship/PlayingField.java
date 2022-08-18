@@ -9,8 +9,8 @@ public class PlayingField {
     }
 
     private void initFillField() {
-
-        UtilsFillField.fillSpaceField(field,0, FieldSizeAndValues.SIZE_STR, FieldSizeAndValues.SIZE_COLUMNS);
+        field[0][0] = " ";
+//        UtilsFillField.fillSpaceField(field,0, FieldSizeAndValues.SIZE_STR, FieldSizeAndValues.SIZE_COLUMNS);
 
         UtilsFillField.FillOneStrNumbers(field,0, FieldSizeAndValues.SIZE_COLUMNS);
 
