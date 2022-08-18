@@ -2,7 +2,7 @@ package battleship;
 
 
 public class PlayingField {
-    private static final String[][] field = new String[FieldSettingsAndValues.SIZE_STR][FieldSettingsAndValues.SIZE_COLUMNS];
+    private static final String[][] field = new String[FieldSizeAndValues.SIZE_STR][FieldSizeAndValues.SIZE_COLUMNS];
 
     protected PlayingField() {
         initFillField();
@@ -10,14 +10,13 @@ public class PlayingField {
 
     private void initFillField() {
 
-        UtilsFillField.fillSpaceField(field,0,FieldSettingsAndValues.SIZE_STR,FieldSettingsAndValues.SIZE_COLUMNS);
+        UtilsFillField.fillSpaceField(field,0, FieldSizeAndValues.SIZE_STR, FieldSizeAndValues.SIZE_COLUMNS);
 
+        UtilsFillField.FillOneStrNumbers(field,0, FieldSizeAndValues.SIZE_COLUMNS);
 
-        UtilsFillField.FillOneStrNumbers(field,0,FieldSettingsAndValues.SIZE_COLUMNS);
+        UtilsFillField.fillOneColumnLetters(field,0, FieldSizeAndValues.SIZE_STR);
 
-        UtilsFillField.fillOneColumnLetters(field,0,FieldSettingsAndValues.SIZE_STR);
-
-        UtilsFillField.FillFieldFOG(field,0,FieldSettingsAndValues.SIZE_STR,FieldSettingsAndValues.SIZE_COLUMNS);
+        UtilsFillField.FillFieldFOG(field,0, FieldSizeAndValues.SIZE_STR, FieldSizeAndValues.SIZE_COLUMNS);
     }
 
     @Override

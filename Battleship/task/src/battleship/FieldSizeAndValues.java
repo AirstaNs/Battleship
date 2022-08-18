@@ -1,6 +1,6 @@
 package battleship;
 
-public interface FieldSettingsAndValues {
+public interface FieldSizeAndValues {
     int SIZE_COLUMNS = 21;
     int SIZE_STR = 11;
     String FOG_BlOCK = "~";

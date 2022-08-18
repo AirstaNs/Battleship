@@ -36,7 +36,7 @@ public class UtilsFillField {
     protected static void FillFieldFOG(String[][] field, int start, int endStr, int endColumn){
         for (int i = start+1; i <endStr ; i++) {
             for (int j = start+2; j <endColumn ; j++) {
-                field[i][j] = FieldSettingsAndValues.FOG_BlOCK;
+                field[i][j] = FieldSizeAndValues.FOG_BlOCK;
             }
         }
     }
