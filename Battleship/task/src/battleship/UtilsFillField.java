@@ -5,12 +5,12 @@ import java.util.Arrays;
 import java.util.List;
 
 public class UtilsFillField {
-    protected static void fillOneColumnLetters(String[][] field, int startStr, int endStr) {
-        List<String> let = getMassLetters();
-        for (int i = startStr; i < endStr; i++) {
-            field[i][0] = let.get(i - 1);
-        }
-    }
+//    protected static void fillOneColumnLetters(String[][] field, int startStr, int endStr) {
+//        List<String> let = getMassLetters();
+//        for (int i = startStr; i < endStr; i++) {
+//            field[i][0] = let.get(i - 1);
+//        }
+//    }
 
     public static List<String> getMassLetters() {
         List<String> letter = new ArrayList<>();
