@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UtilsFillField {
-    protected static void fillOneColumnLetters(String[][] field, int start, int endStr ) {
+    protected static void fillOneColumnLetters(String[][] field, int startStr, int endStr ) {
         List<String> let = getMassLetters();
-        for (int i = start+1; i < endStr; i++) {
+        for (int i = startStr; i < endStr; i++) {
             field[i][0] = let.get(i - 1);
         }
     }
-    protected static List<String> getMassLetters() {
+    public static List<String> getMassLetters() {
         List<String> letter = new ArrayList<>();
         for (char i = 'A'; i <= 'J'; i++) {
             letter.add(String.valueOf(i));
@@ -27,14 +27,14 @@ public class UtilsFillField {
         }
     }
 
-    protected static void FillOneStrNumbers(String[][] field, int start, int endColumn) {
-        for (int i = start+1; i < endColumn; i ++) {
+    protected static void FillOneStrNumbers(String[][] field, int startStr, int endColumn) {
+        for (int i = startStr; i < endColumn; i ++) {
             field[0][i] = String.valueOf(i);
         }
     }
-    protected static void FillFieldFOG(String[][] field, int start, int endStr, int endColumn){
-        for (int i = start+1; i <endStr ; i++) {
-            for (int j = start+1; j <endColumn ; j++) {
+    protected static void FillFieldFOG(String[][] field, int startStrColumn, int endStr, int endColumn){
+        for (int i = startStrColumn; i <endStr ; i++) {
+            for (int j = startStrColumn; j <endColumn ; j++) {
                 field[i][j] = FieldSizeAndValues.FOG_BlOCK;
             }
         }
