@@ -1,19 +1,23 @@
 package battleship.Ships;
 
+import battleship.FieldSizeAndValues;
+
 import java.util.Arrays;
 
 abstract public class Ship {
-    private final String[] shipBlocks;
+    private final char[] shipBlocks;
+
     public Ship(int size) {
-        shipBlocks = new String[size];
-        Arrays.fill(shipBlocks, "O");
+        shipBlocks = new char[size];
+        Arrays.fill(shipBlocks, FieldSizeAndValues.SHIP_BLOCK);
     }
-    public String[] getShipBlocks() {
+
+    public char[] getShipBlocks() {
         return shipBlocks;
     }
 
     @Override
     public String toString() {
-        return String.join(" ",shipBlocks);
+        return String.join("", Arrays.toString(shipBlocks));
     }
 }

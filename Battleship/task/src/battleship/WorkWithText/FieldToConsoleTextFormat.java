@@ -1,12 +1,10 @@
-package battleship;
+package battleship.WorkWithText;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class FieldToConsoleTextFormat {
-    private static final String space = " ";
-    private static final String Empty = "";
-    private static final String LineBreak = "\n";
+
     private final int sizeStringFieldStr;
     private final int getSizeStringFieldStrForNumberTitle;
 
@@ -17,7 +15,7 @@ public class FieldToConsoleTextFormat {
 
     public String getStrFieldFormatOutConsole(char[][] massField) {
         //init  space char in title (_)
-        StringBuilder formatFieldText = new StringBuilder(space);
+        StringBuilder formatFieldText = new StringBuilder(TextConst.SPACE.toString());
         // fill one str __1_2_3_4_5_6_7_8_9_10
         formatFieldText.append(fillWithTitleNumbers(getSizeStringFieldStrForNumberTitle));
 
@@ -30,14 +28,14 @@ public class FieldToConsoleTextFormat {
         // getList A B C D E F G H I J
         List<String> letters = getMassLetters();
 
-        for (int i = 1; i < sizeStringFieldStr; i++) {
+        for (int i = 0; i < sizeStringFieldStr; i++) {
             StringBuilder b = new StringBuilder();
             // add  ( \n )
-            formatFieldText.append(LineBreak);
+            formatFieldText.append(TextConst.LINE_BREAK);
             // ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-            b.append(AddSpaceAndChar(massField[i - 1]));
+            b.append(AddSpaceAndChar(massField[i]));
             // A ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-            b.insert(0, letters.get(i - 1));
+            b.insert(0, letters.get(i));
             // add new str to main Str
             formatFieldText.append(b);
         }
@@ -47,9 +45,9 @@ public class FieldToConsoleTextFormat {
     protected String AddSpaceAndChar(char[] mass) {
         String[] addSpaceChar = new String[mass.length];
         for (int i = 0; i < mass.length; i++) {
-            addSpaceChar[i] = (FieldToConsoleTextFormat.space + mass[i]);
+            addSpaceChar[i] = (TextConst.SPACE.toString() + mass[i]);
         }
-        return String.join(Empty, addSpaceChar);
+        return String.join(TextConst.EMPTY.toString(), addSpaceChar);
     }
 
     // fill one str __1_2_3_4_5_6_7_8_9_10
@@ -57,7 +55,7 @@ public class FieldToConsoleTextFormat {
         StringBuilder strNums = new StringBuilder();
         // zero position = _
         for (int i = 1; i < sizeStringFieldStr; i++) {
-            strNums.append(space);
+            strNums.append(TextConst.SPACE);
             strNums.append(i);
         }
         return strNums.toString();

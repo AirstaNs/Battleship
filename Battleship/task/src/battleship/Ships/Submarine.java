@@ -1,9 +1,8 @@
 package battleship.Ships;
 
-public class Submarine extends Ship{
-    private static final int size = 2;
+public class Submarine extends Ship {
 
     public Submarine() {
-        super(size);
+        super(SizeShip.Submarine.getSize());
     }
 }

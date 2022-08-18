@@ -1,11 +1,9 @@
 package battleship;
 
-import battleship.Ships.AircraftCarrier;
-import battleship.Ships.Ship;
+import battleship.WorkWithText.TextConst;
 
 public class Main {
     public static void main(String[] args) {
-
         PlayingField fieldOnePlayer = new PlayingField();
         System.out.println(fieldOnePlayer);
 //        Ship ship = new AircraftCarrier();
