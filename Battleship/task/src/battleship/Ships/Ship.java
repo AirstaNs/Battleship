@@ -1,13 +1,19 @@
 package battleship.Ships;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.Arrays;
 
 abstract public class Ship {
-    List<String> shipBlocks;
+    private final String[] shipBlocks;
     public Ship(int size) {
-        shipBlocks = new ArrayList<>(size);
-        Collections.fill(shipBlocks,"O");
+        shipBlocks = new String[size];
+        Arrays.fill(shipBlocks, "O");
+    }
+    public String[] getShipBlocks() {
+        return shipBlocks;
+    }
+
+    @Override
+    public String toString() {
+        return String.join(" ",shipBlocks);
     }
 }
