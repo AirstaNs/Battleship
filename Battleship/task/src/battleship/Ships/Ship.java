@@ -1,15 +1,15 @@
 package battleship.Ships;
 
-import battleship.FieldSizeAndValues;
+import battleship.Field.FieldSettings;
 
 import java.util.Arrays;
 
 abstract public class Ship {
     private final char[] shipBlocks;
-
+    private char[] coordinates;
     public Ship(int size) {
         shipBlocks = new char[size];
-        Arrays.fill(shipBlocks, FieldSizeAndValues.SHIP_BLOCK);
+        Arrays.fill(shipBlocks, FieldSettings.SHIP_BLOCK);
     }
 
     public char[] getShipBlocks() {

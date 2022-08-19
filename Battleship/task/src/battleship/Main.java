@@ -1,16 +1,15 @@
 package battleship;
 
-import battleship.WorkWithText.TextConst;
+import battleship.Field.GameField;
+
+import java.util.Scanner;
 
 public class Main {
+    static Scanner scanner = new Scanner(System.in);
     public static void main(String[] args) {
-        PlayingField fieldOnePlayer = new PlayingField();
-        System.out.println(fieldOnePlayer);
-//        Ship ship = new AircraftCarrier();
-//        System.out.println(ship);
-//        PlayingField fieldTwoPlayer = new PlayingField();
-//        System.out.println(fieldTwoPlayer);
-
+//        GameField gameFieldOnePlayer = new GameField();
+//        System.out.println(gameFieldOnePlayer);
+        Game game = new Game();
+        game.startGame();
     }
-
 }

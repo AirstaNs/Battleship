@@ -1,34 +1,48 @@
-package battleship.WorkWithText;
+package battleship.Field.DrawField;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FieldToConsoleTextFormat {
+public class TextField {
 
-    private final int sizeStringFieldStr;
-    private final int getSizeStringFieldStrForNumberTitle;
+    private final int FieldStr;
+    private final int NumberTitle;
+    private final StringBuilder textField;
 
-    public FieldToConsoleTextFormat(int sizeStr) {
-        sizeStringFieldStr = sizeStr;
-        getSizeStringFieldStrForNumberTitle = sizeStr + 1;
+    public TextField(int sizeStr, char[][] massField) {
+        FieldStr = sizeStr;
+        NumberTitle = sizeStr + 1;
+        textField = initTextField(massField);
     }
 
-    public String getStrFieldFormatOutConsole(char[][] massField) {
+    private StringBuilder initTextField(char[][] massField) {
         //init  space char in title (_)
-        StringBuilder formatFieldText = new StringBuilder(TextConst.SPACE.toString());
+        StringBuilder fieldTextFormatted = new StringBuilder(TextConst.SPACE.toString());
         // fill one str __1_2_3_4_5_6_7_8_9_10
-        formatFieldText.append(fillWithTitleNumbers(getSizeStringFieldStrForNumberTitle));
-
-        concatFieldAndLetter(formatFieldText, massField);
+        fieldTextFormatted.append(fillWithTitleNumbers(NumberTitle));
+        // fill zero point to Letter A  \n B   \n  C  e.t.c
+        concatFieldAndLetter(fieldTextFormatted, massField);
         // get String Field
-        return formatFieldText.toString();
+        return fieldTextFormatted;
+    }
+
+    public void drawFieldToConsole() {
+        System.out.println(textField.toString());
+    }
+
+    public StringBuilder getTextField() {
+        return textField;
+    }
+
+    public void drawShot(String Shot) {
+
     }
 
     protected void concatFieldAndLetter(StringBuilder formatFieldText, char[][] massField) {
         // getList A B C D E F G H I J
         List<String> letters = getMassLetters();
 
-        for (int i = 0; i < sizeStringFieldStr; i++) {
+        for (int i = 0; i < FieldStr; i++) {
             StringBuilder b = new StringBuilder();
             // add  ( \n )
             formatFieldText.append(TextConst.LINE_BREAK);
