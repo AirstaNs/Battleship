@@ -9,7 +9,8 @@ import java.util.Scanner;
 public class GameField {
     private final char[][] field = new char[FieldSettings.SIZE_Y][FieldSettings.SIZE_X];
     private final TextField textField;
-    private int countShip=5;
+    private int COUNT_SHIP = 5;
+
     public GameField() {
         initFillField();
         textField = new TextField(FieldSettings.SIZE_Y, field);
@@ -24,6 +25,7 @@ public class GameField {
             field[i] = strFillFogBlocks;
         }
     }
+
     public char[][] getField() {
         return field;
     }
@@ -31,7 +33,8 @@ public class GameField {
     public TextField getTextField() {
         return textField;
     }
-    public void fillFieldShips(Scanner scanner){
+
+    public void fillFieldShips(Scanner scanner) {
 
     }
 

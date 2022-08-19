@@ -78,7 +78,9 @@ public class TextField {
     // getList A B C D E F G H I J
     protected List<String> getMassLetters() {
         List<String> letter = new ArrayList<>();
-        for (char i = 'A'; i <= 'J'; i++) {
+        char start = TextConst.A_char.toChar();
+        char end = TextConst.J_char.toChar();
+        for (char i = start; i <= end; i++) {
             letter.add(String.valueOf(i));
         }
         return letter;
