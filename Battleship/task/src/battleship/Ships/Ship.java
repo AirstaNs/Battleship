@@ -4,10 +4,14 @@ import battleship.Field.DrawField.TextConst;
 import battleship.Field.FieldSettings;
 
 import java.util.Arrays;
+import java.util.List;
+
+import static battleship.Field.FieldSettings.INDEX_END_SHIP_COORDINATE;
+import static battleship.Field.FieldSettings.INDEX_START_COORDINATE;
 
 abstract public class Ship {
     int size;
-    String initMessage = String.format("Enter the coordinates of the %s (5 cells):", this.getClass().getSimpleName());
+    String initMessage = String.format("Enter the coordinates of the %s (%d cells):", this.getClass().getSimpleName(),size);
     private final String ErrorLength = String.format("Error! Wrong length of the %s! Try again:", this.getClass().getSimpleName());
     private final String ErrorPlace = "Error! You placed it too close to another one.";
     private final String ErrorLocation = "Error! Wrong ship location! Try again:";
@@ -18,34 +22,51 @@ abstract public class Ship {
 
     public boolean setShip(char[][] field, String position) {
         boolean isError = true;
-        int[][] coordinates;
+
+        CheckCoordinates check = new CheckCoordinates(size);
+        List<Integer> startPosition;
+        List<Integer> endPosition;
         try {
-            coordinates = convertStringToCoordinates(position);
+            List<List<Integer>> fullCoordinates = check.allChecks(position);
+            startPosition =  fullCoordinates.get(INDEX_START_COORDINATE);
+            endPosition = fullCoordinates.get(INDEX_END_SHIP_COORDINATE);
 
         } catch (NumberFormatException e) {
             System.out.println(ErrorLocation);
             return isError;
-        } catch (RuntimeException e) {
+        } catch (IndexOutOfBoundsException e) {
             System.out.println(ErrorLength);
             return isError;
         }
-        int X_start = coordinates[0][0];
-        int Y_start = coordinates[0][1];
-
-        int X_end = coordinates[1][0];
-        int Y_end = coordinates[1][1];
-
-        if (isBiggerShipSize(X_start, Y_start, X_end, Y_end))
-            return isError;
-
-        boolean isOutOfBoundsStart = Y_start < FieldSettings.BEGIN & X_start < FieldSettings.BEGIN;
-        boolean isOutOfBoundsEnd = Y_end >= FieldSettings.SIZE_Y & X_end >= FieldSettings.SIZE_Y;
-
-        if (isOutOfBoundsStart & isOutOfBoundsEnd) {
-            System.out.println(ErrorLocation);
-            return isError;
-        }
-        return !isError;
+//        boolean isError = true;
+//        int[][] coordinates;
+//        try {
+//            coordinates = convertStringToCoordinates(position);
+//
+//        } catch (NumberFormatException e) {
+//            System.out.println(ErrorLocation);
+//            return isError;
+//        } catch (RuntimeException e) {
+//            System.out.println(ErrorLength);
+//            return isError;
+//        }
+//        int X_start = coordinates[0][0];
+//        int Y_start = coordinates[0][1];
+//
+//        int X_end = coordinates[1][0];
+//        int Y_end = coordinates[1][1];
+//
+//        if (isBiggerShipSize(X_start, Y_start, X_end, Y_end))
+//            return isError;
+//
+//        boolean isOutOfBoundsStart = Y_start < FieldSettings.BEGIN & X_start < FieldSettings.BEGIN;
+//        boolean isOutOfBoundsEnd = Y_end >= FieldSettings.SIZE_Y & X_end >= FieldSettings.SIZE_Y;
+//
+//        if (isOutOfBoundsStart & isOutOfBoundsEnd) {
+//            System.out.println(ErrorLocation);
+//            return isError;
+//        }
+//        return !isError;
     }
 
     private boolean isBiggerShipSize(int X_start, int Y_start, int X_end, int Y_end) {
