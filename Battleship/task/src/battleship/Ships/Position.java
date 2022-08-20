@@ -17,7 +17,7 @@ public class Position {
     public Position() {
     }
 
-    public void setCoordinates(String position) throws NumberFormatException,IndexOutOfBoundsException {
+    public void setCoordinates(String position) throws NumberFormatException, IndexOutOfBoundsException {
         this.X = intOf_X(position);
         this.Y = intOf_Y(position);
     }

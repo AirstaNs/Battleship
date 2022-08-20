@@ -10,13 +10,14 @@ import static battleship.Field.FieldSettings.INDEX_END_SHIP_COORDINATE;
 import static battleship.Field.FieldSettings.INDEX_START_COORDINATE;
 
 abstract public class Ship {
-    String initMessage = String.format("Enter the coordinates of the %s (%d cells):", this.getClass().getSimpleName(), size);
     private final String ErrorLength = String.format("Error! Wrong length of the %s! Try again:", this.getClass().getSimpleName());
     private final String ErrorPlace = "Error! You placed it too close to another one.";
     private final String ErrorLocation = "Error! Wrong ship location! Try again:";
     int size;
-    private Position startPosition;
-    private Position endPosition;
+    String initMessage = String.format("Enter the coordinates of the %s (%d cells):", this.getClass().getSimpleName(), size);
+    protected Position startPosition;
+    protected Position endPosition;
+
     public Ship(int size) {
         this.size = size;
     }
@@ -31,8 +32,8 @@ abstract public class Ship {
             return isError;
         }
 
-         startPosition = new Position();
-         endPosition = new Position();
+        startPosition = new Position();
+        endPosition = new Position();
 
         CheckCoordinates check = new CheckCoordinates(size);
 
@@ -40,7 +41,7 @@ abstract public class Ship {
             // 0 - startPos ; 1 - endPos
             startPosition.setCoordinates(stringCoordinate.get(INDEX_START_COORDINATE));
             endPosition.setCoordinates(stringCoordinate.get(INDEX_END_SHIP_COORDINATE));
-            this.checkAndCorrectorMixedCoordinates(startPosition,endPosition);
+            this.checkAndCorrectorMixedCoordinates(startPosition, endPosition);
 
             check.allChecks(field, startPosition, endPosition);
 
@@ -66,12 +67,15 @@ abstract public class Ship {
             field[i][X] = FieldSettings.SHIP_BLOCK;
         }
     }
+
     // if coordinate written reverse - >  A10 A9  -> return true
     private boolean checkAndCorrectorMixedCoordinates(Position start, Position end) {
+        int zero = 0;
         boolean isMixed = true;
         int sumStart = start.getX() + start.getY();
         int sumEnd = end.getX() + end.getY();
-        if (sumEnd - sumStart < 0) {
+
+        if (sumEnd - sumStart < zero) {
             int temp_start_X = start.getX();
             int temp_start_Y = start.getY();
 

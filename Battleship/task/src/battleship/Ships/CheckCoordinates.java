@@ -1,12 +1,10 @@
 package battleship.Ships;
 
 
-
 import static battleship.Field.FieldSettings.*;
 
 public class CheckCoordinates {
     private final int sizeShip;
-    private static final int NUMBER_OF_COORDINATES = 2;
 
     public CheckCoordinates(int sizeShip) {
         this.sizeShip = sizeShip;
@@ -33,10 +31,11 @@ public class CheckCoordinates {
         }
     }
 
+    // The ship should not stand next to the ship
     private boolean isPlacedTooClose(char[][] field, int X_start, int Y_start, int X_end, int Y_end) {
         boolean isPlaced = true;
-        for (int i = Y_start; i < Y_end; i++) {
-            for (int j = X_start; j < X_end; j++) {
+        for (int i = Y_start - 1; i < Y_end + 1; i++) {
+            for (int j = X_start - 1; j < X_end + 1; j++) {
                 try {
                     if (field[i][j] == SHIP_BLOCK) {
                         return isPlaced;
@@ -48,7 +47,6 @@ public class CheckCoordinates {
         }
         return !isPlaced;
     }
-
 
     // if coordinate out of bounds -> Z or -1
     private boolean isOutOfBounds(int X_start, int Y_start, int X_end, int Y_end) {
