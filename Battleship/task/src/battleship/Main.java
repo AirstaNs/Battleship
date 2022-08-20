@@ -1,9 +1,5 @@
 package battleship;
 
-import battleship.Field.DrawField.TextConst;
-import battleship.Field.GameField;
-import battleship.Ships.AircraftCarrier;
-import battleship.Ships.Ship;
 
 import java.util.*;
 
