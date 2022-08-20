@@ -10,12 +10,7 @@ public class CheckCoordinates {
         this.sizeShip = sizeShip;
     }
 
-    public void allChecks(char[][] field, Position start, Position end) {
-//        int X_start = startPosition.getX();
-//        int Y_start = startPosition.getY();
-
-//        int X_end = endPosition.getX();
-//        int Y_end = endPosition.getY();
+    public void allCheckError(char[][] field, Position start, Position end) {
 
         if (isOutOfBounds(start.getX(), start.getY(), end.getX(), end.getY())) {
             throw new NumberFormatException();
@@ -33,9 +28,15 @@ public class CheckCoordinates {
 
     // The ship should not stand next to the ship
     private boolean isPlacedTooClose(char[][] field, int X_start, int Y_start, int X_end, int Y_end) {
+        //The field around the ship
+        int y = Y_start - 1;
+        int x = X_start - 1;
+        int y_end = Y_end+1;
+        int x_end = X_end+1;
         boolean isPlaced = true;
-        for (int i = Y_start - 1; i < Y_end + 1; i++) {
-            for (int j = X_start - 1; j < X_end + 1; j++) {
+
+        for (int i = y; i < y_end; i++) {
+            for (int j = x; j < x_end; j++) {
                 try {
                     if (field[i][j] == SHIP_BLOCK) {
                         return isPlaced;

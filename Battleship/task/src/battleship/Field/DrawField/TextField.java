@@ -11,7 +11,7 @@ public class TextField {
 
     public TextField(int sizeStr, char[][] massField) {
         FieldStr = sizeStr;
-        NumberTitle = sizeStr + 1;
+        NumberTitle = sizeStr;
         textField = initTextField(massField);
     }
 
@@ -68,7 +68,7 @@ public class TextField {
     protected String fillWithTitleNumbers(int sizeStringFieldStr) {
         StringBuilder strNums = new StringBuilder();
         // zero position = _
-        for (int i = 1; i < sizeStringFieldStr; i++) {
+        for (int i = 1; i <= sizeStringFieldStr; i++) {
             strNums.append(TextConst.SPACE);
             strNums.append(i);
         }

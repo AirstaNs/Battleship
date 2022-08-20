@@ -8,8 +8,6 @@ public interface FieldSettings {
     char SHIP_BLOCK = 'O';
     char BROKEN_BLOCK = 'X';
     char MISS_BLOCK = 'M';
-    int INDEX_X = 0;
-    int INDEX_Y = 1;
     int INDEX_START_COORDINATE = 0;
     int INDEX_END_SHIP_COORDINATE = 1;
 }

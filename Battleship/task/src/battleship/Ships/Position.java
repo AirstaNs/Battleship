@@ -4,6 +4,8 @@ import battleship.Field.DrawField.TextConst;
 
 import java.util.List;
 
+import static battleship.Field.FieldSettings.SIZE_X;
+
 
 public class Position {
     protected static final int SIZE = 2;
@@ -17,11 +19,11 @@ public class Position {
     public Position() {
     }
 
+    // String -> int
     public void setCoordinates(String position) throws NumberFormatException, IndexOutOfBoundsException {
         this.X = intOf_X(position);
         this.Y = intOf_Y(position);
     }
-
 
     // J5 -> [9, 5]       return  {X_start, Y_start}, {X_end, Y_end}
     public List<Integer> getListPosition(String coordinate) {
@@ -34,10 +36,15 @@ public class Position {
 
     // B5 -> get [B] to int ->  A-J % 65
     private int intOf_Y(String y_coordinates) throws IndexOutOfBoundsException {
-        int Y_indexString = 0;
-        char char_Y_start = y_coordinates.charAt(Y_indexString);
+        int Y_StartIndexString = 0;
+        char char_Y_start = y_coordinates.charAt(Y_StartIndexString);
         int convertedY = char_Y_start % TextConst.A_char.toChar(); // A-J % 65 get int
-        return normalizationCoordinate(convertedY);
+        int normalizedY = normalizationCoordinate(convertedY);
+
+        if (!(normalizedY >= Y_StartIndexString & normalizedY < SIZE_X)) {
+            throw new IndexOutOfBoundsException();
+        }
+        return normalizedY;
     }
 
     // A10 -> get 10

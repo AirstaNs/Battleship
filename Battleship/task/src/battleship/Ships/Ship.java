@@ -1,6 +1,5 @@
 package battleship.Ships;
 
-import battleship.Field.DrawField.TextConst;
 import battleship.Field.FieldSettings;
 
 import java.util.Arrays;
@@ -10,16 +9,18 @@ import static battleship.Field.FieldSettings.INDEX_END_SHIP_COORDINATE;
 import static battleship.Field.FieldSettings.INDEX_START_COORDINATE;
 
 abstract public class Ship {
-    private final String ErrorLength = String.format("Error! Wrong length of the %s! Try again:", this.getClass().getSimpleName());
+    private int size;
+    private  String  nameShip;
+    private final String ErrorLength = String.format("Error! Wrong length of the %s! Try again:", nameShip);
     private final String ErrorPlace = "Error! You placed it too close to another one.";
     private final String ErrorLocation = "Error! Wrong ship location! Try again:";
-    int size;
-    String initMessage = String.format("Enter the coordinates of the %s (%d cells):", this.getClass().getSimpleName(), size);
+    String initMessage = String.format("Enter the coordinates of the %s (%d cells):", nameShip, size);
     protected Position startPosition;
     protected Position endPosition;
 
-    public Ship(int size) {
+    public Ship(int size,String nameShip) {
         this.size = size;
+        this.nameShip = nameShip;
     }
 
     public boolean setShip(char[][] field, String position) {
@@ -38,12 +39,13 @@ abstract public class Ship {
         CheckCoordinates check = new CheckCoordinates(size);
 
         try {
-            // 0 - startPos ; 1 - endPos
+                                                        // 0 - startPos ; 1 - endPos
             startPosition.setCoordinates(stringCoordinate.get(INDEX_START_COORDINATE));
             endPosition.setCoordinates(stringCoordinate.get(INDEX_END_SHIP_COORDINATE));
+
             this.checkAndCorrectorMixedCoordinates(startPosition, endPosition);
 
-            check.allChecks(field, startPosition, endPosition);
+            check.allCheckError(field, startPosition, endPosition);
 
         } catch (NumberFormatException e) {
             System.out.println(ErrorLocation);
@@ -55,17 +57,10 @@ abstract public class Ship {
             System.out.println(ErrorPlace);
             return isError;
         }
+
+        this.setStrategySettingShip(field, startPosition, endPosition);
+
         return !isError;
-    }
-
-    protected void setShipFieldHorizontally(char[][] field, int Y, int start, int End) {
-        Arrays.fill(field[Y], start, End, FieldSettings.SHIP_BLOCK);
-    }
-
-    protected void setShipFieldVertical(char[][] field, int X, int start, int End) {
-        for (int i = start; i < End; i++) {
-            field[i][X] = FieldSettings.SHIP_BLOCK;
-        }
     }
 
     // if coordinate written reverse - >  A10 A9  -> return true
@@ -87,6 +82,27 @@ abstract public class Ship {
             return isMixed;
         } else {
             return !isMixed;
+        }
+    }
+
+    // The ship is standing horizontally or vertically
+    private void setStrategySettingShip(char[][] field, Position startPosition, Position endPosition) {
+        if (endPosition.getY() == startPosition.getY())
+            setShipFieldHorizontally(field, startPosition.getY(), startPosition.getX(), endPosition.getX());
+        else {
+            setShipFieldVertically(field, startPosition.getX(), startPosition.getY(), startPosition.getY());
+        }
+    }
+
+    // The ship is standing horizontally
+    protected void setShipFieldHorizontally(char[][] field, int Y, int start, int End) {
+        Arrays.fill(field[Y], start, End, FieldSettings.SHIP_BLOCK);
+    }
+
+    // The ship is standing Vertically
+    protected void setShipFieldVertically(char[][] field, int X, int start, int End) {
+        for (int i = start; i < End; i++) {
+            field[i][X] = FieldSettings.SHIP_BLOCK;
         }
     }
 
