@@ -10,20 +10,24 @@ import static battleship.Field.FieldSettings.*;
 public class CheckCoordinates {
     private final int sizeShip;
     private static final int NUMBER_OF_COORDINATES = 2;
-    private final String ErrorLength=String.format("Error! Wrong length of the %s! Try again:", nameShip);
-    private final String ErrorPlace = "Error! You placed it too close to another one.";
-    private final String ErrorLocation = "Error! Wrong ship location! Try again:";
 
     public CheckCoordinates(int sizeShip) {
         this.sizeShip = sizeShip;
     }
 
-    public List<List<Integer>> allChecks(String position) {
+    public List<List<Integer>> allChecks(char[][] field, String position) {
+        /* index 0 = startShip  /\ index 1 = endShip
+            A5 B2 ->  [A5, B2]
+         */
+        List<String> stringCoordinate = List.of(position.trim().split("\\s+"));
 
-        List<List<Integer>> fullCoordinates = convertTwoPositionOnList(position);
+        if (stringCoordinate.size() > NUMBER_OF_COORDINATES) {
+            throw new IndexOutOfBoundsException();
+        }
+
         // 0 - x ; 1 - y
-        List<Integer> startPosition = fullCoordinates.get(INDEX_START_COORDINATE);
-        List<Integer>  endPosition = fullCoordinates.get(INDEX_END_SHIP_COORDINATE);
+        List<Integer> startPosition = getListPosition(stringCoordinate.get(INDEX_START_COORDINATE));
+        List<Integer> endPosition = getListPosition(stringCoordinate.get(INDEX_END_SHIP_COORDINATE));
 
         int X_start = startPosition.get(INDEX_X);
         int Y_start = startPosition.get(INDEX_Y);
@@ -31,46 +35,55 @@ public class CheckCoordinates {
         int X_end = endPosition.get(INDEX_X);
         int Y_end = endPosition.get(INDEX_Y);
 
+        if (isMixedCoordinates(X_start + Y_start, X_end + Y_end)) {
+            int temp_X_start = X_start;
+            int temp_Y_start = Y_start;
+
+            X_start = X_end;
+            Y_start = Y_end;
+            X_end = temp_X_start;
+            Y_end = temp_Y_start;
+        }
+
         if (isOutOfBounds(X_start, Y_start, X_end, Y_end)) {
-            throw  new NumberFormatException();
+            throw new NumberFormatException();
         }
         if (isBiggerShipSize(X_start, Y_start, X_end, Y_end)) {
-            throw  new IndexOutOfBoundsException();
-        }
-        if (isPlaceDiagonally(X_start, Y_start, X_end, Y_end)) {
-            throw  new NumberFormatException();
-        }
-
-        return !isError;
-    }
-
-    // return  {X_start, Y_start}, {X_end, Y_end}
-    private List<List<Integer>> convertTwoPositionOnList(String position) throws RuntimeException {
-        /* index 0 = startShip  /\ index 1 = endShip
-            A5 B2 ->  [A5, B2]
-         */
-        List<String> listCoordinate = List.of(position.trim().split("\\s+"));
-
-        if (listCoordinate.size() > NUMBER_OF_COORDINATES) {
             throw new IndexOutOfBoundsException();
         }
-        List<Integer> startPosition = getListPosition(listCoordinate.get(INDEX_START_COORDINATE));
-        List<Integer> endPosition = getListPosition(listCoordinate.get(INDEX_END_SHIP_COORDINATE));
+        if (isPlaceDiagonally(X_start, Y_start, X_end, Y_end)) {
+            throw new NumberFormatException();
+        }
+        if (isPlacedTooClose(field, X_start, Y_start, X_end, Y_end)) {
+            throw new IllegalArgumentException();
+        }
 
-        for (int i = 0; i < startPosition.size(); i++) {
-            // 5 4 -> 4 5
-            int start = startPosition.get(i);
-            int end = endPosition.get(i);
-            if (isMixedCoordinates(start, end)) {
-                startPosition.set(i, end);
-                endPosition.set(i, start);
+        return List.of(List.of(X_start, Y_start), List.of(X_end, X_end));
+    }
+
+    private boolean isPlacedTooClose(char[][] field, int X_start, int Y_start, int X_end, int Y_end) {
+        X_start -= 1;
+        Y_start -= 1;
+        Y_end += 1;
+        X_end += 1;
+        boolean isPlaced = true;
+        for (int i = Y_start; i < Y_end; i++) {
+            for (int j = X_start; j < X_end; j++) {
+                try {
+                    if (field[i][j] == SHIP_BLOCK) {
+                        return isPlaced;
+                    }
+                } catch (IndexOutOfBoundsException e) {
+                    continue;
+                }
             }
         }
-        return List.of(startPosition, endPosition);
+        return !isPlaced;
     }
+
     // if coordinate written reverse - > A10 A9 -> return true
-    private boolean isMixedCoordinates(int start, int end) {
-        return (end - start < 0);
+    private boolean isMixedCoordinates(int sumStart, int sumEnd) {
+        return (sumEnd - sumStart < 0);
     }
 
     // if coordinate out of bounds -> Z or -1
@@ -95,7 +108,7 @@ public class CheckCoordinates {
     }
 
 
-    // J5 -> [9, 5]
+    // J5 -> [9, 5]       return  {X_start, Y_start}, {X_end, Y_end}
     private ArrayList<Integer> getListPosition(String coordinate) {
         int X = getNUmberOf_X(coordinate);
         int Y = getNumberOf_Y(coordinate);

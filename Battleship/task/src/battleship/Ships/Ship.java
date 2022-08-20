@@ -27,7 +27,7 @@ abstract public class Ship {
         List<Integer> startPosition;
         List<Integer> endPosition;
         try {
-            List<List<Integer>> fullCoordinates = check.allChecks(position);
+            List<List<Integer>> fullCoordinates = check.allChecks(field,position);
             startPosition =  fullCoordinates.get(INDEX_START_COORDINATE);
             endPosition = fullCoordinates.get(INDEX_END_SHIP_COORDINATE);
 
@@ -36,6 +36,9 @@ abstract public class Ship {
             return isError;
         } catch (IndexOutOfBoundsException e) {
             System.out.println(ErrorLength);
+            return isError;
+        }catch (IllegalArgumentException e){
+            System.out.println(ErrorPlace);
             return isError;
         }
 //        boolean isError = true;
