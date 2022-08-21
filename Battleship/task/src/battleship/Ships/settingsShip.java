@@ -1,7 +1,7 @@
 package battleship.Ships;
 
 public enum settingsShip {
-    AircraftCarrier(5, "AircraftCarrier"),
+    AircraftCarrier(5, "Aircraft Carrier"),
     Battleship(4,"Battleship"),
     Submarine(3,"Submarine"),
     Cruiser(3,"Cruiser"),

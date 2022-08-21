@@ -1,17 +1,13 @@
 package battleship;
 
 
+
 import java.util.*;
 
 public class Main {
-    static Scanner scanner = new Scanner(System.in);
-
     public static void main(String[] args) {
-//        GameField gameFieldOnePlayer = new GameField();
-//        System.out.println(gameFieldOnePlayer);
-//        Game game = new Game();
-//        game.startGame();
-//        Ship ship = new AircraftCarrier();
+        Game game = new Game();
+        game.startGame();
     }
 
     private static void extracted(String position) {

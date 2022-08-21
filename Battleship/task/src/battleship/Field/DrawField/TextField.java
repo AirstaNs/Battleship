@@ -1,25 +1,29 @@
 package battleship.Field.DrawField;
 
+import battleship.Field.FieldSettings;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import static battleship.Field.FieldSettings.BEGIN;
+import static battleship.Field.FieldSettings.BEGIN_NUMERIC;
 
 public class TextField {
 
     private final int FieldStr;
     private final int NumberTitle;
-    private final StringBuilder textField;
+    private final List<StringBuilder> textField;
 
     public TextField(int sizeStr, char[][] massField) {
-        FieldStr = sizeStr;
-        NumberTitle = sizeStr;
-        textField = initTextField(massField);
+        this.FieldStr = sizeStr;
+        this.NumberTitle = sizeStr;
+        this.textField = initTextField(massField);
     }
 
-    private StringBuilder initTextField(char[][] massField) {
-        //init  space char in title (_)
-        StringBuilder fieldTextFormatted = new StringBuilder(TextConst.SPACE.toString());
+    private List<StringBuilder> initTextField(char[][] massField) {
+        List<StringBuilder> fieldTextFormatted = new ArrayList<>();
         // fill one str __1_2_3_4_5_6_7_8_9_10
-        fieldTextFormatted.append(fillWithTitleNumbers(NumberTitle));
+        fieldTextFormatted.add(fillWithTitleNumbers(NumberTitle));
         // fill zero point to Letter A  \n B   \n  C  e.t.c
         concatFieldAndLetter(fieldTextFormatted, massField);
         // get String Field
@@ -27,52 +31,83 @@ public class TextField {
     }
 
     public void drawFieldToConsole() {
-        System.out.println(textField.toString());
+        for (StringBuilder stringBuilder : textField) {
+            System.out.println(stringBuilder.toString());
+        }
     }
 
-    public StringBuilder getTextField() {
+    public List<StringBuilder> getTextField() {
         return textField;
+    }
+
+    public void drawShipHorizontally(int Y, int start, int end) {
+        int skipSpace = 2;
+        int skipNumericStr = 1;
+        int skipLetter = 2;
+        int startStr = skipNumericStr + Y;
+
+        int normalizedLength = end - start + 1;
+        int startShip = start + skipLetter + start;
+        int endShip = startShip + normalizedLength * skipSpace;
+
+        for (int i = startShip; i < endShip; i += skipSpace) {
+            textField.get(startStr).setCharAt(i, FieldSettings.SHIP_BLOCK);
+        }
+    }
+
+    public void drawShipVertically(int X, int start, int end) {
+        int skipNumericStr = 1;
+        int skipLetter = 2;
+        int startShip = start + skipNumericStr;
+        int endShip = end + skipNumericStr;
+
+        int startColumn = X + skipLetter + X;
+
+        for (int i = startShip; i <= endShip; i++) {
+            textField.get(i).setCharAt(startColumn, FieldSettings.SHIP_BLOCK);
+        }
     }
 
     public void drawShot(String Shot) {
 
     }
 
-    protected void concatFieldAndLetter(StringBuilder formatFieldText, char[][] massField) {
+    protected void concatFieldAndLetter(List<StringBuilder> textField, char[][] massField) {
         // getList A B C D E F G H I J
         List<String> letters = getMassLetters();
 
-        for (int i = 0; i < FieldStr; i++) {
+        for (int i = BEGIN; i < FieldStr; i++) {
             StringBuilder b = new StringBuilder();
-            // add  ( \n )
-            formatFieldText.append(TextConst.LINE_BREAK);
             // ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
             b.append(AddSpaceAndChar(massField[i]));
             // A ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-            b.insert(0, letters.get(i));
-            // add new str to main Str
-            formatFieldText.append(b);
+            b.insert(BEGIN, letters.get(i));
+            // trimCapacity str
+            this.trimSizeCapacityTextStr(b);
+            // add new str to List Str
+            textField.add(b);
         }
     }
 
     // ~~~~~~~~~~   ->  _~ ~ ~ ~ ~ ~ ~ ~ ~ ~
     protected String AddSpaceAndChar(char[] mass) {
         String[] addSpaceChar = new String[mass.length];
-        for (int i = 0; i < mass.length; i++) {
+        for (int i = BEGIN; i < mass.length; i++) {
             addSpaceChar[i] = (TextConst.SPACE.toString() + mass[i]);
         }
         return String.join(TextConst.EMPTY.toString(), addSpaceChar);
     }
 
     // fill one str __1_2_3_4_5_6_7_8_9_10
-    protected String fillWithTitleNumbers(int sizeStringFieldStr) {
-        StringBuilder strNums = new StringBuilder();
+    protected StringBuilder fillWithTitleNumbers(int sizeStringFieldStr) {
+        StringBuilder strNums = new StringBuilder(TextConst.SPACE.toString());
         // zero position = _
-        for (int i = 1; i <= sizeStringFieldStr; i++) {
+        for (int i = BEGIN_NUMERIC; i <= sizeStringFieldStr; i++) {
             strNums.append(TextConst.SPACE);
             strNums.append(i);
         }
-        return strNums.toString();
+        this.trimSizeCapacityTextStr(strNums);
+        return strNums;
     }
 
     // getList A B C D E F G H I J
@@ -84,5 +119,11 @@ public class TextField {
             letter.add(String.valueOf(i));
         }
         return letter;
+    }
+
+    private void trimSizeCapacityTextStr(StringBuilder str) {
+        if (str != null) {
+            str.trimToSize();
+        }
     }
 }

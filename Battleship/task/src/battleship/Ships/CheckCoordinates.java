@@ -1,6 +1,8 @@
 package battleship.Ships;
 
 
+import battleship.Field.GameField;
+
 import static battleship.Field.FieldSettings.*;
 
 public class CheckCoordinates {
@@ -10,7 +12,7 @@ public class CheckCoordinates {
         this.sizeShip = sizeShip;
     }
 
-    public void allCheckError(char[][] field, Position start, Position end) {
+    public void allCheckError(char[][] gameField, Position start, Position end) {
 
         if (isOutOfBounds(start.getX(), start.getY(), end.getX(), end.getY())) {
             throw new NumberFormatException();
@@ -21,24 +23,24 @@ public class CheckCoordinates {
         if (isPlaceDiagonally(start.getX(), start.getY(), end.getX(), end.getY())) {
             throw new NumberFormatException();
         }
-        if (isPlacedTooClose(field, start.getX(), start.getY(), end.getX(), end.getY())) {
+        if (isPlacedTooClose(gameField, start.getX(), start.getY(), end.getX(), end.getY())) {
             throw new IllegalArgumentException();
         }
     }
 
     // The ship should not stand next to the ship
-    private boolean isPlacedTooClose(char[][] field, int X_start, int Y_start, int X_end, int Y_end) {
+    private boolean isPlacedTooClose(char[][] gameField, int X_start, int Y_start, int X_end, int Y_end) {
         //The field around the ship
         int y = Y_start - 1;
         int x = X_start - 1;
-        int y_end = Y_end+1;
-        int x_end = X_end+1;
+        int y_end = Y_end + 1;
+        int x_end = X_end + 1;
         boolean isPlaced = true;
 
-        for (int i = y; i < y_end; i++) {
-            for (int j = x; j < x_end; j++) {
+        for (int i = y; i <= y_end; i++) {
+            for (int j = x; j <= x_end; j++) {
                 try {
-                    if (field[i][j] == SHIP_BLOCK) {
+                    if (gameField[i][j] == SHIP_BLOCK) {
                         return isPlaced;
                     }
                 } catch (IndexOutOfBoundsException e) {
@@ -59,10 +61,11 @@ public class CheckCoordinates {
 
     //if length excess size ship return true
     private boolean isBiggerShipSize(int X_start, int Y_start, int X_end, int Y_end) {
+        int one = 1;
+        int length_Y = Y_end - Y_start + one;
+        int length_X = X_end - X_start + one;
 
-        boolean isBiggerSize_Y = Y_end - Y_start != sizeShip;
-        boolean isBiggerSize_X = X_end - X_start != sizeShip;
-        return isBiggerSize_Y | isBiggerSize_X;
+        return length_Y != sizeShip & length_X != sizeShip;
     }
 
     // A1 B2

@@ -4,6 +4,7 @@ import battleship.Field.DrawField.TextConst;
 
 import java.util.List;
 
+import static battleship.Field.FieldSettings.BEGIN;
 import static battleship.Field.FieldSettings.SIZE_X;
 
 
@@ -39,12 +40,11 @@ public class Position {
         int Y_StartIndexString = 0;
         char char_Y_start = y_coordinates.charAt(Y_StartIndexString);
         int convertedY = char_Y_start % TextConst.A_char.toChar(); // A-J % 65 get int
-        int normalizedY = normalizationCoordinate(convertedY);
 
-        if (!(normalizedY >= Y_StartIndexString & normalizedY < SIZE_X)) {
+        if (!(convertedY < SIZE_X)) {
             throw new IndexOutOfBoundsException();
         }
-        return normalizedY;
+        return convertedY;
     }
 
     // A10 -> get 10
@@ -56,7 +56,7 @@ public class Position {
     }
 
     private int normalizationCoordinate(int coordinate) {
-        return --coordinate;
+        return  --coordinate;
     }
 
     public void setX(int x) {
