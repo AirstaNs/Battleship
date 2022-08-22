@@ -11,4 +11,8 @@ public interface FieldSettings {
     char MISS_BLOCK = 'M';
     int INDEX_START_COORDINATE = 0;
     int INDEX_END_SHIP_COORDINATE = 1;
+     String ErrorPlace = "Error! You placed it too close to another one.";
+     String Error_Location_Ship = "Error! Wrong ship location! Try again:";
+     String Error_Location_Shot = "Error! You entered the wrong coordinates! Try again:";
+     String ErrorNumberCoordinate = "Error! should be 1 coordinate";
 }

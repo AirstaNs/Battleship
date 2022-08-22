@@ -12,7 +12,7 @@ public class Position {
     private int X = Integer.MIN_VALUE;
     private int Y = Integer.MIN_VALUE;
 
-    public Position(String position) {
+    public Position(String position) throws NumberFormatException, IndexOutOfBoundsException  {
         setCoordinates(position);
     }
 

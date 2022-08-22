@@ -1,5 +1,6 @@
 package battleship.Field;
 
+import battleship.Field.DrawField.TextConst;
 import battleship.Field.DrawField.TextField;
 import battleship.Ships.CheckCoordinates;
 import battleship.Ships.Position;
@@ -8,6 +9,7 @@ import battleship.Ships.settingsShip;
 
 import java.util.Scanner;
 
+import static battleship.Field.DrawField.TextConst.LINE_BREAK;
 import static battleship.Field.FieldSettings.*;
 
 
@@ -15,6 +17,8 @@ public class GameField {
     private final char[][] field = new char[FieldSettings.SIZE_Y][FieldSettings.SIZE_X];
     private final TextField textField;
     private int COUNT_SHIP = 5;
+    private final String hitShip = "You hit a ship!";
+    private final String missed = "You missed!";
 
     public GameField() {
         initFillField();
@@ -38,7 +42,8 @@ public class GameField {
         return textField;
     }
 
-    public void fillFieldShips(Scanner scanner) {
+    public void fillFieldShips() {
+        Scanner scanner = new Scanner(System.in);
         for (int i = BEGIN; i < COUNT_SHIP; i++) {
             boolean freeField;
             settingsShip settingShip = settingsShip.values()[i];
@@ -46,7 +51,7 @@ public class GameField {
             do {
                 ship.printInitMessage();
                 freeField = ship.fieldFreeForShip(this.getField(), scanner.nextLine());
-            } while (!freeField);
+            } while (freeField);
             this.setShipToField(ship.getStartPosition(), ship.getEndPosition());
             this.textField.drawFieldToConsole();
         }
@@ -80,9 +85,34 @@ public class GameField {
         textField.drawShipVertically(X, start, end);
     }
 
-    private void setShot(String position) {
-        Position cell = new Position(position);
-        CheckCoordinates checkCoordinates = new CheckCoordinates();
-//        checkCoordinates.isOutOfBoundsCoordinates()
+    public boolean setShot() {
+        Scanner scanner = new Scanner(System.in);
+        Position cell = null;
+        boolean isErr = true;
+        do {
+            try {
+                CheckCoordinates checkCoordinates = new CheckCoordinates();
+                cell = new Position(scanner.nextLine());
+                isErr = (checkCoordinates.isOutOfBoundsCoordinates(cell.getX(), cell.getY()));
+            } catch (NumberFormatException e) {
+                System.out.println(ErrorNumberCoordinate + LINE_BREAK);
+            } catch (IndexOutOfBoundsException e) {
+                System.out.println(Error_Location_Shot + LINE_BREAK);
+            }
+        } while (isErr);
+
+        boolean isShip = isShipBlock(cell);
+        char block = isShip ? BROKEN_BLOCK : MISS_BLOCK;
+        field[cell.getY()][cell.getX()] = block;
+
+        textField.drawShot(block, cell);
+        textField.drawFieldToConsole();
+        System.out.println(isShip ? hitShip : missed);
+        System.out.println();
+        return isShip;
+    }
+
+    public boolean isShipBlock(Position cell) {
+        return field[cell.getY()][cell.getX()] == SHIP_BLOCK;
     }
 }

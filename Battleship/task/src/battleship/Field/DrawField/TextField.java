@@ -1,10 +1,12 @@
 package battleship.Field.DrawField;
 
 import battleship.Field.FieldSettings;
+import battleship.Ships.Position;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static battleship.Field.DrawField.TextConst.LINE_BREAK;
 import static battleship.Field.FieldSettings.BEGIN;
 import static battleship.Field.FieldSettings.BEGIN_NUMERIC;
 
@@ -13,6 +15,9 @@ public class TextField {
     private final int FieldStr;
     private final int NumberTitle;
     private final List<StringBuilder> textField;
+    private final int skipSpace = 2;
+    private final int skipNumericStr = 1;
+    private final int skipLetter = 2;
 
     public TextField(int sizeStr, char[][] massField) {
         this.FieldStr = sizeStr;
@@ -34,6 +39,7 @@ public class TextField {
         for (StringBuilder stringBuilder : textField) {
             System.out.println(stringBuilder.toString());
         }
+        System.out.print(LINE_BREAK);
     }
 
     public List<StringBuilder> getTextField() {
@@ -41,9 +47,6 @@ public class TextField {
     }
 
     public void drawShipHorizontally(int Y, int start, int end) {
-        int skipSpace = 2;
-        int skipNumericStr = 1;
-        int skipLetter = 2;
         int startStr = skipNumericStr + Y;
 
         int normalizedLength = end - start + 1;
@@ -56,8 +59,6 @@ public class TextField {
     }
 
     public void drawShipVertically(int X, int start, int end) {
-        int skipNumericStr = 1;
-        int skipLetter = 2;
         int startShip = start + skipNumericStr;
         int endShip = end + skipNumericStr;
 
@@ -68,8 +69,10 @@ public class TextField {
         }
     }
 
-    public void drawShot(String Shot) {
-
+    public void drawShot(char block, Position position) {
+        int startX = position.getX() + skipLetter + position.getX();
+        int Y = position.getY() + skipNumericStr;
+        textField.get(Y).setCharAt(startX, block);
     }
 
     protected void concatFieldAndLetter(List<StringBuilder> textField, char[][] massField) {

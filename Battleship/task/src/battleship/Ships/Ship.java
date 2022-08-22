@@ -4,15 +4,14 @@ import battleship.Field.DrawField.TextConst;
 
 import java.util.List;
 
-import static battleship.Field.FieldSettings.INDEX_END_SHIP_COORDINATE;
-import static battleship.Field.FieldSettings.INDEX_START_COORDINATE;
+import static battleship.Field.DrawField.TextConst.LINE_BREAK;
+import static battleship.Field.FieldSettings.*;
 
 public class Ship {
     private int size;
     private String nameShip;
     private final String ErrorLength;
-    private final String ErrorPlace = "Error! You placed it too close to another one.";
-    private final String ErrorLocation = "Error! Wrong ship location! Try again:";
+
     private final String initMessage;
 
     private Position startPosition;
@@ -26,13 +25,13 @@ public class Ship {
     }
 
     public boolean fieldFreeForShip(char[][] gameField, String position) {
-        boolean isError = false;
+        boolean isNotError = true;
 
         List<String> stringCoordinate = List.of(position.toUpperCase().trim().split("\\s+"));
 
         if (stringCoordinate.size() > Position.SIZE) {
             System.out.println(ErrorLength);
-            return isError;
+            return false;
         }
 
         startPosition = new Position();
@@ -47,19 +46,16 @@ public class Ship {
 
             this.checkAndCorrectorMixedCoordinates(startPosition, endPosition);
 
-            check.CheckErrorSetShip(size, gameField, startPosition, endPosition);
+            isNotError = check.CheckErrorSetShip(size, gameField, startPosition, endPosition);
 
         } catch (NumberFormatException e) {
-            System.out.println(ErrorLocation + TextConst.LINE_BREAK);
-            return isError;
+            System.out.println(Error_Location_Ship + LINE_BREAK);
         } catch (IndexOutOfBoundsException e) {
-            System.out.println(ErrorLength + TextConst.LINE_BREAK);
-            return isError;
+            System.out.println(ErrorLength + LINE_BREAK);
         } catch (IllegalArgumentException e) {
-            System.out.println(ErrorPlace + TextConst.LINE_BREAK);
-            return isError;
+            System.out.println(ErrorPlace + LINE_BREAK);
         }
-        return !isError;
+        return isNotError;
     }
 
     // if coordinate written reverse - >  A10 A9  -> return true
@@ -85,9 +81,7 @@ public class Ship {
     }
 
     public void printInitMessage() {
-        System.out.println();
-        System.out.println(initMessage);
-        System.out.println();
+        System.out.println(initMessage+LINE_BREAK);
     }
 
     public Position getStartPosition() {

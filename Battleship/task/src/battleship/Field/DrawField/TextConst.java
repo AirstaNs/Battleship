@@ -6,7 +6,6 @@ public enum TextConst {
     LINE_BREAK("\n"),
     A_char("A"),
     J_char("J");
-
     private final String symbol;
 
     TextConst(String symbol) {
