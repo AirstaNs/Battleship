@@ -1,13 +1,11 @@
 package battleship.Field;
 
-import battleship.Field.DrawField.TextConst;
 import battleship.Field.DrawField.TextField;
 import battleship.Ships.CheckCoordinates;
 import battleship.Ships.Position;
 import battleship.Ships.Ship;
 import battleship.Ships.settingsShip;
 
-import java.util.Arrays;
 import java.util.Scanner;
 
 import static battleship.Field.DrawField.TextConst.LINE_BREAK;
@@ -16,7 +14,7 @@ import static battleship.Field.FieldSettings.*;
 
 public class GameField {
     private final char[][] field;
-    private final TextField textField;
+    private TextField textField;
     private int COUNT_SHIP = 5;
     private final String hitShip = "You hit a ship!";
     private final String missed = "You missed!";
@@ -62,6 +60,9 @@ public class GameField {
             this.setShipToField(ship.getStartPosition(), ship.getEndPosition());
             this.textField.drawFieldToConsole();
         }
+        // Сбрасывает текстовое поле до тумана
+        textField = new TextField(SIZE_Y, getFieldFilledFog());
+        this.textField.drawFieldToConsole();
     }
 
     // The ship is standing horizontally or vertically
@@ -103,7 +104,7 @@ public class GameField {
         Position cell = null;
         boolean isErr = true;
         do {
-            // Пока поле введено с ошибками продолжать
+            // Пока поле введено с ошибками - продолжать запрашивать координаты
             try {
                 CheckCoordinates checkCoordinates = new CheckCoordinates();
                 cell = new Position(scanner.nextLine());
