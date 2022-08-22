@@ -4,7 +4,6 @@ import battleship.Field.DrawField.TextConst;
 
 import java.util.List;
 
-import static battleship.Field.FieldSettings.BEGIN;
 import static battleship.Field.FieldSettings.SIZE_X;
 
 

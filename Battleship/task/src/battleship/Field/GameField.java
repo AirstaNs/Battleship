@@ -1,11 +1,11 @@
 package battleship.Field;
 
 import battleship.Field.DrawField.TextField;
+import battleship.Ships.CheckCoordinates;
 import battleship.Ships.Position;
 import battleship.Ships.Ship;
 import battleship.Ships.settingsShip;
 
-import java.util.Arrays;
 import java.util.Scanner;
 
 import static battleship.Field.FieldSettings.*;
@@ -23,7 +23,7 @@ public class GameField {
 
     private void initFillField() {
         // fill all str ~~~~~~~~~~~
-        for (int i = 0; i < SIZE_Y ; i++) {
+        for (int i = 0; i < SIZE_Y; i++) {
             for (int j = 0; j < FieldSettings.SIZE_X; j++) {
                 field[i][j] = FieldSettings.FOG_BlOCK;
             }
@@ -64,11 +64,11 @@ public class GameField {
     // The ship is standing horizontally
     private void setShipFieldHorizontally(int Y, int start, int end) {
 
-        for (int i = start; i <= end; i ++) {
-            field[Y][i] =  FieldSettings.SHIP_BLOCK;
+        for (int i = start; i <= end; i++) {
+            field[Y][i] = FieldSettings.SHIP_BLOCK;
         }
 
-        textField.drawShipHorizontally(Y,start, end);
+        textField.drawShipHorizontally(Y, start, end);
 
     }
 
@@ -77,7 +77,12 @@ public class GameField {
         for (int i = start; i <= end; i++) {
             field[i][X] = FieldSettings.SHIP_BLOCK;
         }
-        textField.drawShipVertically(X,start, end);
+        textField.drawShipVertically(X, start, end);
     }
 
+    private void setShot(String position) {
+        Position cell = new Position(position);
+        CheckCoordinates checkCoordinates = new CheckCoordinates();
+//        checkCoordinates.isOutOfBoundsCoordinates()
+    }
 }

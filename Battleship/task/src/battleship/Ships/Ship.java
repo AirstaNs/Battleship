@@ -3,7 +3,6 @@ package battleship.Ships;
 import battleship.Field.DrawField.TextConst;
 
 import java.util.List;
-import java.util.Locale;
 
 import static battleship.Field.FieldSettings.INDEX_END_SHIP_COORDINATE;
 import static battleship.Field.FieldSettings.INDEX_START_COORDINATE;
@@ -39,7 +38,7 @@ public class Ship {
         startPosition = new Position();
         endPosition = new Position();
 
-        CheckCoordinates check = new CheckCoordinates(size);
+        CheckCoordinates check = new CheckCoordinates();
 
         try {
             // 0 - startPos ; 1 - endPos
@@ -48,7 +47,7 @@ public class Ship {
 
             this.checkAndCorrectorMixedCoordinates(startPosition, endPosition);
 
-            check.allCheckError(gameField, startPosition, endPosition);
+            check.CheckErrorSetShip(size, gameField, startPosition, endPosition);
 
         } catch (NumberFormatException e) {
             System.out.println(ErrorLocation + TextConst.LINE_BREAK);
