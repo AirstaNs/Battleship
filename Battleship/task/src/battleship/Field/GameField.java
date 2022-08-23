@@ -16,9 +16,8 @@ public class GameField {
     private final char[][] field;
     private TextField textField;
     private int COUNT_SHIP = 5;
-    private final String hitShip = "You hit a ship!";
-    private final String missed = "You missed!";
-
+    private static int numberShipCells = 17;
+    //viewFieldForAnotherPlayer
     public GameField() {
         field = getFieldFilledFog();
         textField = new TextField(FieldSettings.SIZE_Y, field);
@@ -36,14 +35,6 @@ public class GameField {
         return gameField;
     }
 
-    public char[][] getField() {
-        return field;
-    }
-
-    public TextField getTextField() {
-        return textField;
-    }
-
     // Заполняет поле кораблями при старте игры - 5 штук
     public void fillFieldShips() {
         Scanner scanner = new Scanner(System.in);
@@ -52,18 +43,22 @@ public class GameField {
             // название кораблей и их размер
             settingsShip settingShip = settingsShip.values()[i];
             Ship ship = new Ship(settingShip.getSize(), settingShip.getNameShip());
+            ship.printInitMessage();
             do {
-                ship.printInitMessage();
                 //Проверка поля и координат на правильность
                 freeField = ship.fieldFreeForShip(this.getField(), scanner.nextLine());
             } while (freeField);
             this.setShipToField(ship.getStartPosition(), ship.getEndPosition());
             this.textField.drawFieldToConsole();
         }
-        // Сбрасывает текстовое поле до тумана
-        textField = new TextField(SIZE_Y, getFieldFilledFog());
-        this.textField.drawFieldToConsole();
+        //Сбрасывает текстовое поле до тумана
+        resetTextField();
     }
+    //Сбрасывает текстовое поле до тумана
+    public void resetTextField() {
+        textField =  new TextField(SIZE_Y, getFieldFilledFog());
+    }
+
 
     // The ship is standing horizontally or vertically
     private void setShipToField(Position startPosition, Position endPosition) {
@@ -109,21 +104,35 @@ public class GameField {
                 CheckCoordinates checkCoordinates = new CheckCoordinates();
                 cell = new Position(scanner.nextLine());
                 isErr = (checkCoordinates.isOutOfBoundsCoordinates(cell.getX(), cell.getY()));
+
             } catch (NumberFormatException e) {
                 System.out.println(ErrorNumberCoordinate + LINE_BREAK);
             } catch (IndexOutOfBoundsException e) {
                 System.out.println(Error_Location_Shot + LINE_BREAK);
             }
+
         } while (isErr);
 
         boolean isShip = isShipBlock(cell);
-        char block = isShip ? BROKEN_BLOCK : MISS_BLOCK;
+        boolean isBroken = isBrokenBlock(cell);
+        char block;
+        // Если сломанный блок, то просто возвращаем true тк это раньше был корабль //TODO такие правила JetBrains
+        if (isBroken) {
+            return true;
+
+        } else if (isShip) {
+            numberShipCells--;
+            block = BROKEN_BLOCK;
+        } else {
+            block = MISS_BLOCK;
+        }
         field[cell.getY()][cell.getX()] = block;
 
         textField.drawShot(block, cell);
-        textField.drawFieldToConsole();
-        System.out.println(isShip ? hitShip : missed);
-        System.out.println();
+
+//        //  textField.drawFieldToConsole();
+//        System.out.println(isShipBlock ? hitShip : missed);
+//        System.out.println();
         return isShip;
     }
 
@@ -133,5 +142,20 @@ public class GameField {
      */
     public boolean isShipBlock(Position cell) {
         return field[cell.getY()][cell.getX()] == SHIP_BLOCK;
+    }
+
+    public boolean isBrokenBlock(Position cell) {
+        return field[cell.getY()][cell.getX()] == BROKEN_BLOCK;
+    }
+
+    public char[][] getField() {
+        return field;
+    }
+
+    public TextField getTextField() {
+        return textField;
+    }
+    public int getNumberShipCells() {
+        return numberShipCells;
     }
 }

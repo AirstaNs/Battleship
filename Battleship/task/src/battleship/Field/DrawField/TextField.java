@@ -18,6 +18,7 @@ public class TextField {
     private final int skipSpace = 2;
     private final int skipNumericStr = 1;
     private final int skipLetter = 2;
+    //viewFieldForAnotherPlayer
 
     public TextField(int sizeStr, char[][] massField) {
         this.FieldStr = sizeStr;
@@ -35,22 +36,11 @@ public class TextField {
         return fieldTextFormatted;
     }
 
-    public void drawFieldToConsole() {
-        for (StringBuilder stringBuilder : textField) {
-            System.out.println(stringBuilder.toString());
-        }
-        System.out.print(LINE_BREAK);
-    }
-
-    public List<StringBuilder> getTextField() {
-        return textField;
-    }
-
     public void drawShipHorizontally(int Y, int start, int end) {
         int startStr = skipNumericStr + Y;
 
         int normalizedLength = end - start + 1;
-        int startShip = start + skipLetter + start;
+        int startShip = skipLetter + (start * skipSpace);
         int endShip = startShip + normalizedLength * skipSpace;
 
         for (int i = startShip; i < endShip; i += skipSpace) {
@@ -62,7 +52,7 @@ public class TextField {
         int startShip = start + skipNumericStr;
         int endShip = end + skipNumericStr;
 
-        int startColumn = X + skipLetter + X;
+        int startColumn = skipLetter + (skipSpace * X);
 
         for (int i = startShip; i <= endShip; i++) {
             textField.get(i).setCharAt(startColumn, FieldSettings.SHIP_BLOCK);
@@ -70,7 +60,7 @@ public class TextField {
     }
 
     public void drawShot(char block, Position position) {
-        int startX = position.getX() + skipLetter + position.getX();
+        int startX = skipLetter + (position.getX() * skipSpace);
         int Y = position.getY() + skipNumericStr;
         textField.get(Y).setCharAt(startX, block);
     }
@@ -91,7 +81,6 @@ public class TextField {
             textField.add(b);
         }
     }
-
     // ~~~~~~~~~~   ->  _~ ~ ~ ~ ~ ~ ~ ~ ~ ~
     protected String AddSpaceAndChar(char[] mass) {
         String[] addSpaceChar = new String[mass.length];
@@ -124,9 +113,20 @@ public class TextField {
         return letter;
     }
 
+    public void drawFieldToConsole() {
+        for (StringBuilder stringBuilder : textField) {
+            System.out.println(stringBuilder.toString());
+        }
+        System.out.print(LINE_BREAK);
+    }
+
     private void trimSizeCapacityTextStr(StringBuilder str) {
         if (str != null) {
             str.trimToSize();
         }
+    }
+
+    public List<StringBuilder> getTextField() {
+        return textField;
     }
 }

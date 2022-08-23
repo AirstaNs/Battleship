@@ -25,13 +25,12 @@ public class Ship {
     }
 
     public boolean fieldFreeForShip(char[][] gameField, String position) {
-        boolean isNotError = true;
-
+        boolean isError = true;
         List<String> stringCoordinate = List.of(position.toUpperCase().trim().split("\\s+"));
 
         if (stringCoordinate.size() > Position.SIZE) {
-            System.out.println(ErrorLength);
-            return false;
+            System.out.println(ErrorLength+LINE_BREAK);
+            return isError;
         }
 
         startPosition = new Position();
@@ -46,7 +45,7 @@ public class Ship {
 
             this.checkAndCorrectorMixedCoordinates(startPosition, endPosition);
 
-            isNotError = check.CheckErrorSetShip(size, gameField, startPosition, endPosition);
+            isError = check.CheckErrorSetShip(size, gameField, startPosition, endPosition);
 
         } catch (NumberFormatException e) {
             System.out.println(Error_Location_Ship + LINE_BREAK);
@@ -55,7 +54,7 @@ public class Ship {
         } catch (IllegalArgumentException e) {
             System.out.println(ErrorPlace + LINE_BREAK);
         }
-        return isNotError;
+        return isError;
     }
 
     // if coordinate written reverse - >  A10 A9  -> return true
