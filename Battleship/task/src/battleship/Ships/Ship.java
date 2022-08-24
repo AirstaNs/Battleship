@@ -24,7 +24,7 @@ public class Ship {
         ErrorLength = String.format("Error! Wrong length of the %s! Try again:", nameShip);
     }
 
-    public boolean fieldFreeForShip(char[][] gameField, String position) {
+    public boolean fieldFreeForShip(List<StringBuilder> gameField, String position) {
         boolean isError = true;
         List<String> stringCoordinate = List.of(position.toUpperCase().trim().split("\\s+"));
 

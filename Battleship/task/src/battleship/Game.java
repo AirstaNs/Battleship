@@ -1,62 +1,73 @@
 package battleship;
 
 
-import battleship.Field.GameField;
+import java.util.List;
+import java.util.stream.IntStream;
 
 import static battleship.Field.DrawField.TextConst.LINE_BREAK;
-import static battleship.Field.FieldSettings.ZERO_BLOCK_SHIP;
+import static battleship.Field.FieldSettings.BEGIN;
+import static battleship.Field.FieldSettings.BEGIN_NUMERIC;
 
 public class Game {
-    private final String hitShip = "You hit a ship!";
-    private final String missed = "You missed!";
-    private final String WIN = "You sank the last ship. You won. Congratulations!";
+    private static final int ONE_PLAYER = 0;
+    private static final int TWO_PLAYER = 1;
+    private static final String delimiterField = "---------------------";
 
     public void startGame() {
+        List<Player> players = List.of(new Player(), new Player());
 
-        Player playerOne = new Player();
-        GameField playerOneField = playerOne.getPlayersGameField();
+        IntStream.range(BEGIN, players.size()).forEach(i -> {
+            printPlaceShip(i);
+            players.get(i).getPlayersGameField().drawFieldToConsole();
+            players.get(i).fillFieldShips();
+        });
 
-        playerOneField.getTextField().drawFieldToConsole();
-        playerOneField.fillFieldShips();
 
-        printStartGame();
-        playerOneField.resetTextField();
 
-        playerOneField.getTextField().drawFieldToConsole();
-        boolean isShipBlock;
-//        do {
-//            printShot();
-//            isShipBlock = playerOneField.setShot();
-//
-//            playerOneField.getResetField().drawFieldToConsole();
-//            System.out.println(isShipBlock ? hitShip : missed);
-//            System.out.println();
-//        } while (isShipBlock);
-        while (playerOneField.getNumberShipCells() != ZERO_BLOCK_SHIP) {
-            isShipBlock = true;
-            while (isShipBlock) {
-                printShot();
-                isShipBlock = playerOneField.setShot();
+        for (int i = 0; players.get(ONE_PLAYER).isWin() | players.get(TWO_PLAYER).isWin(); i++) {
+             passMove();
 
-                playerOneField.getTextField().drawFieldToConsole();
-
-                if (playerOneField.getNumberShipCells() == ZERO_BLOCK_SHIP) {
-                    System.out.println(WIN);
-                    isShipBlock = false;
-                } else if (isShipBlock) {
-                    System.out.println(hitShip + LINE_BREAK);
-                } else {
-                    System.out.println(missed + LINE_BREAK);
-                }
+            int enemy;
+            int setter;
+            if (i % 2 == 0) {
+                enemy = TWO_PLAYER;
+                setter = ONE_PLAYER;
+            } else {
+                enemy = ONE_PLAYER;
+                setter = TWO_PLAYER;
             }
+            players.get(enemy).getFieldAnotherPlayer().drawFieldToConsole();
+            System.out.println(delimiterField);
+
+            players.get(setter).getPlayersGameField().drawFieldToConsole();
+
+            printShot(setter);
+            players.get(enemy).setShot();
         }
+        printWin();
     }
+
 
     private static void printStartGame() {
         System.out.println("The game starts!" + LINE_BREAK);
     }
 
-    private static void printShot() {
-        System.out.println("Take a shot!" + LINE_BREAK);
+    private static void printPlaceShip(int numberPlayer) {
+        System.out.printf("Player %d, place your ships to the game field%n%n", numberPlayer + BEGIN_NUMERIC);
+    }
+
+    private static void printShot(int numberPlayer) {
+        System.out.printf("Player %d, it's your turn:%n%n", numberPlayer + BEGIN_NUMERIC);
+    }
+
+    private static void passMove() {
+        System.out.printf("Press Enter and pass the move to another player\n");
+        try {
+            System.in.read();
+        } catch (Exception e) {
+        }
+    }
+    private static void printWin(){
+        System.out.println("You sank the last ship. You won. Congratulations!");
     }
 }

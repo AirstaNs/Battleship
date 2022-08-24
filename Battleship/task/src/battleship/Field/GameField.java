@@ -1,161 +1,131 @@
 package battleship.Field;
 
-import battleship.Field.DrawField.TextField;
-import battleship.Ships.CheckCoordinates;
-import battleship.Ships.Position;
-import battleship.Ships.Ship;
-import battleship.Ships.settingsShip;
 
-import java.util.Scanner;
+import battleship.Field.DrawField.TextConst;
+import battleship.Field.FieldSettings;
+import battleship.Ships.Position;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static battleship.Field.DrawField.TextConst.LINE_BREAK;
+import static battleship.Field.DrawField.TextConst.SPACE;
 import static battleship.Field.FieldSettings.*;
 
 
 public class GameField {
-    private final char[][] field;
-    private TextField textField;
-    private int COUNT_SHIP = 5;
-    private static int numberShipCells = 17;
+    private final List<StringBuilder> field;
+    private static final String stringNumber = drawTitleNumbers();
+    private static final List<Character> letter = getMassLetters();
+    private final int skipSpace = 2;
+
     //viewFieldForAnotherPlayer
     public GameField() {
-        field = getFieldFilledFog();
-        textField = new TextField(FieldSettings.SIZE_Y, field);
+        field = FieldFilledFog();
+        // TODO  textField = new TextField(FieldSettings.SIZE_Y, field);
     }
 
-    //Создает и заполняет массив туманом
-    public static char[][] getFieldFilledFog() {
-        char[][] gameField = new char[FieldSettings.SIZE_Y][FieldSettings.SIZE_X];
-        // fill all str ~~~~~~~~~~~
-        for (int i = 0; i < SIZE_Y; i++) {
-            for (int j = 0; j < FieldSettings.SIZE_X; j++) {
-                gameField[i][j] = FieldSettings.FOG_BlOCK;
-            }
-        }
-        return gameField;
+    public List<StringBuilder> getField() {
+        return field;
     }
-
-    // Заполняет поле кораблями при старте игры - 5 штук
-    public void fillFieldShips() {
-        Scanner scanner = new Scanner(System.in);
-        for (int i = BEGIN; i < COUNT_SHIP; i++) {
-            boolean freeField;
-            // название кораблей и их размер
-            settingsShip settingShip = settingsShip.values()[i];
-            Ship ship = new Ship(settingShip.getSize(), settingShip.getNameShip());
-            ship.printInitMessage();
-            do {
-                //Проверка поля и координат на правильность
-                freeField = ship.fieldFreeForShip(this.getField(), scanner.nextLine());
-            } while (freeField);
-            this.setShipToField(ship.getStartPosition(), ship.getEndPosition());
-            this.textField.drawFieldToConsole();
-        }
-        //Сбрасывает текстовое поле до тумана
-        resetTextField();
-    }
-    //Сбрасывает текстовое поле до тумана
-    public void resetTextField() {
-        textField =  new TextField(SIZE_Y, getFieldFilledFog());
-    }
-
 
     // The ship is standing horizontally or vertically
-    private void setShipToField(Position startPosition, Position endPosition) {
+    public void drawShipToField(Position startPosition, Position endPosition) {
         if (endPosition.getY() == startPosition.getY()) {
-            setShipFieldHorizontally(startPosition.getY(), startPosition.getX(), endPosition.getX());
+            drawShipHorizontally(startPosition.getY(), startPosition.getX(), endPosition.getX());
         } else {
-            setShipFieldVertically(startPosition.getX(), startPosition.getY(), endPosition.getY());
+            drawShipVertically(startPosition.getX(), startPosition.getY(), endPosition.getY());
         }
     }
 
     // The ship is standing horizontally
-    private void setShipFieldHorizontally(int Y, int start, int end) {
+    private void drawShipHorizontally(int Y, int start, int end) {
+        int normalizedLength = end - start + 1;
+        int startShip = start * skipSpace;
+        int endShip = startShip + normalizedLength * skipSpace;
 
-        for (int i = start; i <= end; i++) {
-            field[Y][i] = FieldSettings.SHIP_BLOCK;
+        for (int i = startShip; i < endShip; i += skipSpace) {
+            field.get(Y).setCharAt(i, FieldSettings.SHIP_BLOCK);
         }
-        // Заполняет текстовое поле
-        textField.drawShipHorizontally(Y, start, end);
 
     }
 
     // The ship is standing Vertically
-    private void setShipFieldVertically(int X, int start, int end) {
+    private void drawShipVertically(int X, int start, int end) {
+        int startColumn = skipSpace * X;
         for (int i = start; i <= end; i++) {
-            field[i][X] = FieldSettings.SHIP_BLOCK;
+            field.get(i).setCharAt(startColumn, FieldSettings.SHIP_BLOCK);
         }
-        // Заполняет текстовое поле
-        textField.drawShipVertically(X, start, end);
     }
 
-    /**
-     * Наносит удар по полю, проверяя введенную позицию на ошибки
-     *
-     * @return true - попал по кораблю и продолжать играть, Нет - false
-     */
-    public boolean setShot() {
-        Scanner scanner = new Scanner(System.in);
-        Position cell = null;
-        boolean isErr = true;
-        do {
-            // Пока поле введено с ошибками - продолжать запрашивать координаты
-            try {
-                CheckCoordinates checkCoordinates = new CheckCoordinates();
-                cell = new Position(scanner.nextLine());
-                isErr = (checkCoordinates.isOutOfBoundsCoordinates(cell.getX(), cell.getY()));
 
-            } catch (NumberFormatException e) {
-                System.out.println(ErrorNumberCoordinate + LINE_BREAK);
-            } catch (IndexOutOfBoundsException e) {
-                System.out.println(Error_Location_Shot + LINE_BREAK);
-            }
+    public void drawFieldToConsole() {
+        System.out.println(stringNumber);
 
-        } while (isErr);
-
-        boolean isShip = isShipBlock(cell);
-        boolean isBroken = isBrokenBlock(cell);
-        char block;
-        // Если сломанный блок, то просто возвращаем true тк это раньше был корабль //TODO такие правила JetBrains
-        if (isBroken) {
-            return true;
-
-        } else if (isShip) {
-            numberShipCells--;
-            block = BROKEN_BLOCK;
-        } else {
-            block = MISS_BLOCK;
+        for (int i = 0; i < SIZE_Y; i++) {
+            // A ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+            System.out.printf("%c %s", letter.get(i), field.get(i));
+            System.out.print(LINE_BREAK);
         }
-        field[cell.getY()][cell.getX()] = block;
-
-        textField.drawShot(block, cell);
-
-//        //  textField.drawFieldToConsole();
-//        System.out.println(isShipBlock ? hitShip : missed);
-//        System.out.println();
-        return isShip;
+        System.out.print(LINE_BREAK);
     }
 
-    /**
-     * @param cell клетка на поле
-     * @return Клетка на поле это часть корабля?
-     */
-    public boolean isShipBlock(Position cell) {
-        return field[cell.getY()][cell.getX()] == SHIP_BLOCK;
-    }
+    //Создает и заполняет массив туманом
+    public List<StringBuilder> FieldFilledFog() {
+        List<StringBuilder> textField = new ArrayList<>();
+        // fill all str ~~~~~~~~~~~
+        String str = getStringFillingFog();
 
-    public boolean isBrokenBlock(Position cell) {
-        return field[cell.getY()][cell.getX()] == BROKEN_BLOCK;
-    }
-
-    public char[][] getField() {
-        return field;
-    }
-
-    public TextField getTextField() {
+        for (int i = BEGIN; i < SIZE_Y; i++) {
+            StringBuilder b = new StringBuilder();
+            // ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+            b.append(str);
+            // trimCapacity str
+            trimSizeCapacityTextStr(b);
+            // add new str to List Str
+            textField.add(b);
+        }
         return textField;
     }
-    public int getNumberShipCells() {
-        return numberShipCells;
+
+    // ~~~~~~~~~~   ->  _~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+    private String getStringFillingFog() {
+        StringBuilder b = new StringBuilder();
+        for (int i = BEGIN; i < FieldSettings.SIZE_X; i++) {
+            b.append(FieldSettings.FOG_BlOCK);
+            b.append(SPACE);
+        }
+        b.deleteCharAt((FieldSettings.SIZE_X * skipSpace) - 1);
+        trimSizeCapacityTextStr(b);
+        return b.toString();
     }
+
+    // fill one str __1_2_3_4_5_6_7_8_9_10
+    private static String drawTitleNumbers() {
+        StringBuilder strNums = new StringBuilder(TextConst.SPACE.toString());
+        // zero position = _
+        for (int i = BEGIN_NUMERIC; i <= FieldSettings.SIZE_X; i++) {
+            strNums.append(TextConst.SPACE);
+            strNums.append(i);
+        }
+        return strNums.toString();
+    }
+
+    // getList A B C D E F G H I J
+    private static List<Character> getMassLetters() {
+        List<Character> letter = new ArrayList<>();
+        char start = TextConst.A_char.toChar();
+        char end = TextConst.J_char.toChar();
+        for (char i = start; i <= end; i++) {
+            letter.add(i);
+        }
+        return letter;
+    }
+
+    private void trimSizeCapacityTextStr(StringBuilder str) {
+        if (str != null) {
+            str.trimToSize();
+        }
+    }
+
 }

@@ -1,11 +1,13 @@
 package battleship.Ships;
 
 
+import java.util.List;
+
 import static battleship.Field.FieldSettings.*;
 
 public class CheckCoordinates {
 
-    public boolean CheckErrorSetShip(int sizeShip, char[][] gameField, Position start, Position end)
+    public boolean CheckErrorSetShip(int sizeShip, List<StringBuilder> gameField, Position start, Position end)
             throws IndexOutOfBoundsException, IllegalArgumentException {
 
         isOutOfBoundsCoordinates(start.getX(), start.getY());
@@ -21,21 +23,18 @@ public class CheckCoordinates {
     }
 
     // The ship should not stand next to the ship
-    public boolean isPlacedTooClose(char[][] gameField, int X_start, int Y_start, int X_end, int Y_end) {
+    public boolean isPlacedTooClose(List<StringBuilder> gameField, int X_start, int Y_start, int X_end, int Y_end) {
         //The field around the ship
-        int y = Y_start - 1;
-        int x = X_start - 1;
-        int y_end = Y_end + 1;
-        int x_end = X_end + 1;
+        int y = Y_start <= BEGIN ? BEGIN : Y_start - BEGIN_NUMERIC;
+        int x = X_start <= BEGIN ? BEGIN : ((X_start - BEGIN_NUMERIC) * skipSpace);
+        int y_end = Y_end >= SIZE_Y - BEGIN_NUMERIC ? Y_end : Y_end + BEGIN_NUMERIC;
+        int x_end = X_end >= SIZE_X - BEGIN_NUMERIC ? X_end : X_end + BEGIN_NUMERIC;
+        x_end = (x_end * skipSpace);
 
         for (int i = y; i <= y_end; i++) {
-            for (int j = x; j <= x_end; j++) {
-                try {
-                    if (gameField[i][j] == SHIP_BLOCK) {
-                        throw new IllegalArgumentException();
-                    }
-                } catch (IndexOutOfBoundsException e) {
-                    continue;
+            for (int j = x; j <= x_end; j += skipSpace) {
+                if (gameField.get(i).charAt(j) == SHIP_BLOCK) {
+                    throw new IllegalArgumentException();
                 }
             }
         }
