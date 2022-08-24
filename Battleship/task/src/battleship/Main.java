@@ -1,7 +1,5 @@
 package battleship;
 
-
-
 import java.util.*;
 
 public class Main {
