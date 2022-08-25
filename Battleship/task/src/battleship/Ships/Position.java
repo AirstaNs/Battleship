@@ -3,11 +3,12 @@ package battleship.Ships;
 import battleship.Field.DrawField.TextConst;
 
 import java.util.List;
+import java.util.Objects;
 
 import static battleship.Field.FieldSettings.SIZE_X;
 
 
-public class Position {
+public class Position implements Comparable<Position> {
     protected static final int SIZE = 2;
     private int X = Integer.MIN_VALUE;
     private int Y = Integer.MIN_VALUE;
@@ -24,7 +25,8 @@ public class Position {
         this.X = intOf_X(position);
         this.Y = intOf_Y(position);
     }
-    public void setCoordinates(List<Integer> coordinates)  {
+
+    public void setCoordinates(List<Integer> coordinates) {
         int x = 0;
         int y = 1;
         this.setX(coordinates.get(x));
@@ -94,5 +96,30 @@ public class Position {
 
     public int getY() {
         return Y;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (this.hashCode() != o.hashCode()) return false;
+        Position position = (Position) o;
+        return X == position.X && Y == position.Y;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(X, Y);
+    }
+
+    @Override
+    public int compareTo(Position otherPosition) {
+        if (this.equals(otherPosition)) {
+            return 0;
+        } else if ((this.Y < otherPosition.Y) || (this.Y == otherPosition.Y && this.X < otherPosition.X)) {
+            return -1;
+        }else {
+            return 1;
+        }
     }
 }
