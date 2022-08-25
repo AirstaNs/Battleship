@@ -23,7 +23,7 @@ public class Game {
         });
 
 
-        for (int i = 0; players.get(ONE_PLAYER).isWin() | players.get(TWO_PLAYER).isWin(); i++) {
+        for (int i = 0; players.get(ONE_PLAYER).isWin() & players.get(TWO_PLAYER).isWin(); i++) {
             passMove();
 
             int enemy;
@@ -60,10 +60,10 @@ public class Game {
     }
 
     private static void passMove() {
-        System.out.printf("Press Enter and pass the move to another player\n");
+        System.out.print("Press Enter and pass the move to another player\n");
         try {
             System.in.read();
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
