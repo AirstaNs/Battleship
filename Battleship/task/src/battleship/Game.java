@@ -4,7 +4,7 @@ package battleship;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import static battleship.Field.DrawField.TextConst.LINE_BREAK;
+import static battleship.Field.TextConst.LINE_BREAK;
 import static battleship.Field.FieldSettings.BEGIN;
 import static battleship.Field.FieldSettings.BEGIN_NUMERIC;
 

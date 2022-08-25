@@ -2,7 +2,7 @@ package battleship.Ships;
 
 import java.util.List;
 
-import static battleship.Field.DrawField.TextConst.LINE_BREAK;
+import static battleship.Field.TextConst.LINE_BREAK;
 import static battleship.Field.FieldSettings.*;
 
 public class Ship {

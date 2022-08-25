@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import static battleship.Field.DrawField.TextConst.LINE_BREAK;
+import static battleship.Field.TextConst.LINE_BREAK;
 import static battleship.Field.FieldSettings.*;
 import static battleship.Field.FieldSettings.COUNT_SHIP;
 

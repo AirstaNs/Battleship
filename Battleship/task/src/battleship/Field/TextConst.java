@@ -1,4 +1,4 @@
-package battleship.Field.DrawField;
+package battleship.Field;
 
 public enum TextConst {
     SPACE(" "),

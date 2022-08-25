@@ -1,13 +1,12 @@
 package battleship.Field;
 
 
-import battleship.Field.DrawField.TextConst;
 import battleship.Ships.Position;
 import java.util.ArrayList;
 import java.util.List;
 
-import static battleship.Field.DrawField.TextConst.LINE_BREAK;
-import static battleship.Field.DrawField.TextConst.SPACE;
+import static battleship.Field.TextConst.LINE_BREAK;
+import static battleship.Field.TextConst.SPACE;
 import static battleship.Field.FieldSettings.*;
 
 

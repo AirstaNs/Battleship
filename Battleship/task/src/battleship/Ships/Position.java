@@ -1,6 +1,6 @@
 package battleship.Ships;
 
-import battleship.Field.DrawField.TextConst;
+import battleship.Field.TextConst;
 
 import java.util.List;
 import java.util.Objects;
