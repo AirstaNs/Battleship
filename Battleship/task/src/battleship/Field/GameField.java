@@ -2,9 +2,7 @@ package battleship.Field;
 
 
 import battleship.Field.DrawField.TextConst;
-import battleship.Field.FieldSettings;
 import battleship.Ships.Position;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,10 +21,6 @@ public class GameField {
     public GameField() {
         field = FieldFilledFog();
         // TODO  textField = new TextField(FieldSettings.SIZE_Y, field);
-    }
-
-    public List<StringBuilder> getField() {
-        return field;
     }
 
     // The ship is standing horizontally or vertically
@@ -57,7 +51,6 @@ public class GameField {
             field.get(i).setCharAt(startColumn, FieldSettings.SHIP_BLOCK);
         }
     }
-
 
     public void drawFieldToConsole() {
         System.out.println(stringNumber);
@@ -128,4 +121,7 @@ public class GameField {
         }
     }
 
+    public List<StringBuilder> getField() {
+        return field;
+    }
 }

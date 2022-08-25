@@ -12,7 +12,7 @@ public class Position {
     private int X = Integer.MIN_VALUE;
     private int Y = Integer.MIN_VALUE;
 
-    public Position(String position) throws NumberFormatException, IndexOutOfBoundsException  {
+    public Position(String position) throws NumberFormatException, IndexOutOfBoundsException {
         setCoordinates(position);
     }
 
@@ -24,14 +24,24 @@ public class Position {
         this.X = intOf_X(position);
         this.Y = intOf_Y(position);
     }
+    public void setCoordinates(List<Integer> coordinates)  {
+        int x = 0;
+        int y = 1;
+        this.setX(coordinates.get(x));
+        this.setY(coordinates.get(y));
+    }
 
     // J5 -> [9, 5]       return  {X_start, Y_start}, {X_end, Y_end}
     public List<Integer> getListPosition(String coordinate) {
-        if (X == Integer.MIN_VALUE & Y == Integer.MIN_VALUE) {
+        if (isNotFieldInitialized()) {
             setY(coordinate);
             setX(coordinate);
         }
         return List.of(X, Y);
+    }
+
+    public List<Integer> getListPosition() {
+        return isNotFieldInitialized() ? List.of() : List.of(X, Y);
     }
 
     // B5 -> get [B] to int ->  A-J % 65
@@ -55,7 +65,19 @@ public class Position {
     }
 
     private int normalizationCoordinate(int coordinate) {
-        return  --coordinate;
+        return --coordinate;
+    }
+
+    private boolean isNotFieldInitialized() {
+        return X == Integer.MIN_VALUE & Y == Integer.MIN_VALUE;
+    }
+
+    public void setX(String str) {
+        this.X = intOf_X(str);
+    }
+
+    public void setY(String str) {
+        this.Y = intOf_Y(str);
     }
 
     public void setX(int x) {
@@ -72,13 +94,5 @@ public class Position {
 
     public int getY() {
         return Y;
-    }
-
-    public void setX(String str) {
-        this.X = intOf_X(str);
-    }
-
-    public void setY(String str) {
-        this.Y = intOf_Y(str);
     }
 }
