@@ -1,6 +1,6 @@
 package battleship;
 
-import battleship.Field.FieldSettings;
+
 import battleship.Field.GameField;
 import battleship.Ships.CheckCoordinates;
 import battleship.Ships.Position;
@@ -21,6 +21,7 @@ public class Player {
     private final String hitShip = "You hit a ship!";
     private final String missed = "You missed!";
     private final List<Ship> ships;
+    private final String sunkShip = "You sank a ship! Specify a new target:\n\n";
 
     public Player() {
         playersGameField = new GameField();
@@ -71,17 +72,19 @@ public class Player {
 
     }
 
-    /*  Если сломанный блок, то просто возвращаем true тк это раньше был корабль //TODO такие правила JetBrains
+    /*  Если сломанный блок, то пишем "вы попали в корабль" тк это раньше был корабль //TODO такие правила JetBrains
         Устанавливает блок в зависимости какой установлен на поле уже
+        TODO COMMAND ПАТТЕРН ИСПОЛЬЗОВАТЬ
      */
     public void setBlock(Position cell) {
+        // получаем GameFiled для противника и для себя
         int Y = cell.getY();
         int X = cell.getX() * skipSpace;
         StringBuilder positionField = playersGameField.getField().get(Y);
         StringBuilder positionAnotherField = fieldAnotherPlayer.getField().get(Y);
 
         char block = positionField.charAt(X);
-
+        //В зависимости от блока печатаем фразу и меняем символ
         switch (block) {
             case FOG_BlOCK:
                 positionField.setCharAt(X, MISS_BLOCK);
@@ -89,18 +92,38 @@ public class Player {
                 System.out.println(missed + LINE_BREAK);
                 break;
             case SHIP_BLOCK:
-//                for (var ship :ships) {
-//                    if(cell.equals(ship.getStartPosition()) | cell <= ship.getEndPosition()){
-//                        cell.getX()>= ship.getStartPosition().getX() | cell.getY()>= ship.getStartPosition().getY()
-//                    }
-//                }
-
+                //Если корабль уничтожен печатаем фразу
+                if (DecreaseShipLength(cell)) {
+                    positionField.setCharAt(X, BROKEN_BLOCK);
+                    positionAnotherField.setCharAt(X, BROKEN_BLOCK);
+                    System.out.println(sunkShip);
+                    break;
+                }
             default:
                 positionField.setCharAt(X, BROKEN_BLOCK);
                 positionAnotherField.setCharAt(X, BROKEN_BLOCK);
                 System.out.println(hitShip + LINE_BREAK);
                 break;
         }
+    }
+
+    private boolean DecreaseShipLength(Position shot) {
+        boolean decrease = true;
+
+        for (int i = 0; i < ships.size(); i++) {
+            Ship ship = ships.get(i);
+            var startPosition = ship.getStartPosition();
+            var endPosition = ship.getEndPosition();
+            if (startPosition.compareTo(shot) <= 0 | endPosition.compareTo(shot) >= 0) {
+                ship.HitShip();
+                if (ship.getLength() == ZERO_BLOCK_SHIP) {
+                    ships.remove(ship);
+                    return decrease;
+                }
+                break;
+            }
+        }
+        return !decrease;
     }
 
     // Заполняет поле кораблями при старте игры - 5 штук
