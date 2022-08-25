@@ -23,9 +23,8 @@ public class Game {
         });
 
 
-
         for (int i = 0; players.get(ONE_PLAYER).isWin() | players.get(TWO_PLAYER).isWin(); i++) {
-             passMove();
+            passMove();
 
             int enemy;
             int setter;
@@ -67,7 +66,8 @@ public class Game {
         } catch (Exception e) {
         }
     }
-    private static void printWin(){
+
+    private static void printWin() {
         System.out.println("You sank the last ship. You won. Congratulations!");
     }
 }

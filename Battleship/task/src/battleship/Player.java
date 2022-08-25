@@ -1,11 +1,14 @@
 package battleship;
 
+import battleship.Field.FieldSettings;
 import battleship.Field.GameField;
 import battleship.Ships.CheckCoordinates;
 import battleship.Ships.Position;
 import battleship.Ships.Ship;
 import battleship.Ships.settingsShip;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import static battleship.Field.DrawField.TextConst.LINE_BREAK;
@@ -14,14 +17,16 @@ import static battleship.Field.FieldSettings.COUNT_SHIP;
 
 public class Player {
     private final GameField playersGameField;
-    private GameField fieldAnotherPlayer;
-    private static int numberShipCells = 17;
+    private final GameField fieldAnotherPlayer;
     private final String hitShip = "You hit a ship!";
     private final String missed = "You missed!";
+    private final List<Ship> ships;
 
     public Player() {
         playersGameField = new GameField();
         fieldAnotherPlayer = new GameField();
+        ships = new ArrayList<>(COUNT_SHIP);
+        ;
     }
 
     public GameField getPlayersGameField() {
@@ -33,7 +38,7 @@ public class Player {
     }
 
     public boolean isWin() {
-        return !(numberShipCells <= ZERO_BLOCK_SHIP);
+        return !(ships.size() == ZERO_BLOCK_SHIP);
     }
 
 
@@ -70,23 +75,29 @@ public class Player {
         Устанавливает блок в зависимости какой установлен на поле уже
      */
     public void setBlock(Position cell) {
-        StringBuilder positionField = playersGameField.getField().get(cell.getY());
-        StringBuilder positionAnotherField = fieldAnotherPlayer.getField().get(cell.getY());
+        int Y = cell.getY();
+        int X = cell.getX() * skipSpace;
+        StringBuilder positionField = playersGameField.getField().get(Y);
+        StringBuilder positionAnotherField = fieldAnotherPlayer.getField().get(Y);
 
-        int column = cell.getX() * skipSpace;
-        char block = positionField.charAt(column);
+        char block = positionField.charAt(X);
 
         switch (block) {
             case FOG_BlOCK:
-                positionField.setCharAt(column, MISS_BLOCK);
-                positionAnotherField.setCharAt(column, MISS_BLOCK);
+                positionField.setCharAt(X, MISS_BLOCK);
+                positionAnotherField.setCharAt(X, MISS_BLOCK);
                 System.out.println(missed + LINE_BREAK);
                 break;
             case SHIP_BLOCK:
-                numberShipCells--;
+//                for (var ship :ships) {
+//                    if(cell.equals(ship.getStartPosition()) | cell <= ship.getEndPosition()){
+//                        cell.getX()>= ship.getStartPosition().getX() | cell.getY()>= ship.getStartPosition().getY()
+//                    }
+//                }
+
             default:
-                positionField.setCharAt(column, BROKEN_BLOCK);
-                positionAnotherField.setCharAt(column, BROKEN_BLOCK);
+                positionField.setCharAt(X, BROKEN_BLOCK);
+                positionAnotherField.setCharAt(X, BROKEN_BLOCK);
                 System.out.println(hitShip + LINE_BREAK);
                 break;
         }
@@ -105,8 +116,10 @@ public class Player {
                 //Проверка поля и координат на правильность
                 freeField = ship.fieldFreeForShip(this.getPlayersGameField().getField(), scanner.nextLine());
             } while (freeField);
+            ships.add(ship);
             playersGameField.drawShipToField(ship.getStartPosition(), ship.getEndPosition());
             playersGameField.drawFieldToConsole();
+
         }
     }
 }
