@@ -29,8 +29,10 @@ public class Position implements Comparable<Position> {
     public void setCoordinates(List<Integer> coordinates) {
         int x = 0;
         int y = 1;
-        this.setX(coordinates.get(x));
-        this.setY(coordinates.get(y));
+        int numberCoordinates = 2;
+        if (coordinates.size() == numberCoordinates) ;
+        this.X = (coordinates.get(x));
+        this.Y = (coordinates.get(y));
     }
 
     // J5 -> [9, 5]       return  {X_start, Y_start}, {X_end, Y_end}
@@ -74,30 +76,6 @@ public class Position implements Comparable<Position> {
         return X == Integer.MIN_VALUE & Y == Integer.MIN_VALUE;
     }
 
-    public void setX(String str) {
-        this.X = intOf_X(str);
-    }
-
-    public void setY(String str) {
-        this.Y = intOf_Y(str);
-    }
-
-    public void setX(int x) {
-        this.X = x;
-    }
-
-    public void setY(int y) {
-        this.Y = y;
-    }
-
-    public int getX() {
-        return X;
-    }
-
-    public int getY() {
-        return Y;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -118,8 +96,24 @@ public class Position implements Comparable<Position> {
             return 0;
         } else if ((this.Y < otherPosition.Y) || (this.Y == otherPosition.Y && this.X < otherPosition.X)) {
             return -1;
-        }else {
+        } else {
             return 1;
         }
+    }
+
+    public void setX(String str) {
+        this.X = intOf_X(str);
+    }
+
+    public void setY(String str) {
+        this.Y = intOf_Y(str);
+    }
+
+    public int getX() {
+        return X;
+    }
+
+    public int getY() {
+        return Y;
     }
 }
